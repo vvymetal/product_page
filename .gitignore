@@ -1,0 +1,20 @@
+# Ignorovat celý adresář venv
+venv/
+
+# Pro případ, že by někdo použil jiný název pro virtuální prostředí
+virtualenv/
+env/
+
+# Ignorovat také .pyc soubory a __pycache__ adresáře
+*.pyc
+__pycache__/
+
+# Ignorovat soubory .env, které mohou obsahovat citlivé informace
+.env
+
+# Ignorovat logy
+*.log
+
+# Ignorovat soubory IDE (pro případ, že používáte PyCharm nebo VS Code)
+.idea/
+.vscode/

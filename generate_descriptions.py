@@ -4,20 +4,19 @@ import time
 from dotenv import load_dotenv
 import os
 
-# Načtení proměnných prostředí
 load_dotenv()
-
-# Nastavení API klíče
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def generate_description(assistant_id, product):
+def generate_descriptions(assistant_id, product_ids):
     thread = openai.beta.threads.create()
     
-    openai.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=f"Generate a description for this product: {json.dumps(product, ensure_ascii=False)}"
-    )
+    for product_id in product_ids:
+        message_content = f"Použijte funkci generate_product_description pro produkt s ID {product_id}"
+        openai.beta.threads.messages.create(
+            thread_id=thread.id,
+            role="user",
+            content=message_content
+        )
     
     run = openai.beta.threads.runs.create(
         thread_id=thread.id,
@@ -25,7 +24,7 @@ def generate_description(assistant_id, product):
     )
     
     while run.status not in ['completed', 'failed']:
-        time.sleep(1)
+        time.sleep(5)
         run = openai.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
     
     if run.status == 'failed':
@@ -35,28 +34,16 @@ def generate_description(assistant_id, product):
     return messages.data[0].content[0].text.value
 
 def main():
-    # Načtení ID asistenta
     with open('assistant_id.txt', 'r') as f:
         assistant_id = f.read().strip()
 
-    # Načtení produktů
-    with open('products.json', 'r', encoding='utf-8') as f:
-        products = json.load(f)
+    product_ids = ["1", "2", "3"]  # Nahraďte skutečnými ID produktů
 
-    # Generování popisů
-    new_descriptions = []
-    for product in products:
-        print(f"Generating description for product {product['id']}...")
-        new_description = generate_description(assistant_id, product)
-        new_descriptions.append({
-            "id": product["id"],
-            "original_description": product.get("description", ""),
-            "new_description": new_description
-        })
+    print("Generating descriptions...")
+    descriptions_json = generate_descriptions(assistant_id, product_ids)
 
-    # Uložení výsledků
     with open('new_product_descriptions.json', 'w', encoding='utf-8') as f:
-        json.dump(new_descriptions, f, ensure_ascii=False, indent=2)
+        f.write(descriptions_json)
 
     print("All descriptions generated and saved.")
 
