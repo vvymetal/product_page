@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="product-page">
+    <div class="product-main">
+        <div class="product-gallery">
+            <div class="main-image">
+                <img src="{{ product.společné_části.základní_informace.hlavní_obrázek }}" alt="{{ product.společné_části.základní_informace.název_produktu }}">
+                <span class="badge">Novinka</span>
+            </div>
+            <div class="thumbnail-gallery">
+                {% for image in product.společné_části.galerie_obrázků %}
+                <img src="{{ image }}" alt="Náhled produktu">
+                {% endfor %}
+            </div>
+            <div class="product-360">360° prohlídka</div>
+        </div>
+        <div class="product-info">
+            <h1>{{ product.společné_části.základní_informace.název_produktu }}</h1>
+            <div class="price">{{ product.společné_části.základní_informace.cena.s_dph }} Kč</div>
+            <div class="rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span class="review-count">({{ product.společné_části.základní_informace.hodnocení.počet_hodnocení }} hodnocení)</span>
+            </div>
+            <div class="availability">{{ product.společné_části.základní_informace.dostupnost }}</div>
+            <div class="age-category-selector">
+                {% for category in product.personalizované_části.věkové_kategorie %}
+                <button class="age-category-btn" data-category="{{ category }}">{{ category }} let</button>
+                {% endfor %}
+            </div>
+            <button class="cta-button">Přidat do košíku</button>
+            <div class="loyalty-points">Získejte {{ product.společné_části.základní_informace.bodové_ohodnocení }} bodů do věrnostního programu</div>
+        </div>
+    </div>
+    
+    <div id="personalized-content">
+        {% for category in product.personalizované_části.věkové_kategorie %}
+        <div class="age-category-content" data-category="{{ category }}">
+            <h2>Obsah pro věkovou kategorii {{ category }} let</h2>
+            <p class="short-description">{{ product.personalizované_části.personalizovaný_obsah[category].krátký_popis }}</p>
+            <div class="tiande-lifestyle">
+                <img src="/static/images/tiande-lifestyle.png" alt="Tiande Lifestyle">
+                <p>{{ product.personalizované_části.personalizovaný_obsah[category].tiande_lifestyle_text }}</p>
+            </div>
+            <div class="quick-overview">
+                <h3>Rychlý přehled</h3>
+                <ul>
+                    {% for item in product.personalizované_části.personalizovaný_obsah[category].rychlý_přehled %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="key-benefits">
+                <h3>Klíčové benefity</h3>
+                <ul>
+                    {% for item in product.personalizované_části.personalizovaný_obsah[category].klíčové_benefity %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="reviews">
+                <h3>Recenze zákazníků</h3>
+                {% for review in product.personalizované_části.personalizovaný_obsah[category].recenze_zákazníků %}
+                <div class="review">
+                    <p><strong>{{ review.jméno }}</strong> - {{ review.hodnocení }}/5</p>
+                    <p>{{ review.text }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="faq">
+                <h3>Často kladené otázky</h3>
+                {% for qa in product.personalizované_části.personalizovaný_obsah[category].často_kladené_otázky %}
+                <div class="faq-item">
+                    <h4>{{ qa.otázka }}</h4>
+                    <p>{{ qa.odpověď }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="recommended-products">
+                <h3>Doporučené produkty</h3>
+                <ul>
+                    {% for product in product.personalizované_části.personalizovaný_obsah[category].doporučené_produkty %}
+                    <li>{{ product }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <nav class="sticky-nav">
+        <a href="#product-description">Popis</a>
+        <a href="#ingredients">Složení</a>
+        <a href="#usage-instructions">Použití</a>
+        <a href="#reviews">Recenze</a>
+        <a href="#faq">FAQ</a>
+    </nav>
+    
+    <section id="product-description">
+        <h2>Popis produktu</h2>
+        <p>{{ product.společné_části.detailní_popis }}</p>
+    </section>
+    
+    <section id="ingredients">
+        <h2>Složení a účinky</h2>
+        <ul>
+            {% for ingredient in product.společné_části.základní_informace.složení_a_účinky %}
+            <li><strong>{{ ingredient.složka }}:</strong> {{ ingredient.účinek }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    
+    <section id="usage-instructions">
+        <h2>Návod k použití</h2>
+        <p>{{ product.společné_části.základní_informace.návod_k_použití }}</p>
+    </section>
+    
+    <section id="frequently-bought-together">
+        <h2>Často kupováno společně</h2>
+        <!-- Implementace této sekce bude záviset na dostupnosti dat -->
+    </section>
+    
+    <section id="tiande-community">
+        <h2>Tiande komunita</h2>
+        <!-- Implementace této sekce bude záviset na dostupnosti dat -->
+    </section>
+    
+    <section id="educational-section">
+        <h2>Vzdělávací sekce</h2>
+        <a href="#">Navštivte náš kurz v Univerzitě Království Tiande</a>
+    </section>
+    
+    <section id="newsletter-signup">
+        <h2>Přihlaste se k odběru novinek</h2>
+        <form>
+            <input type="email" placeholder="Váš e-mail">
+            <button type="submit">Přihlásit</button>
+        </form>
+    </section>
+</div>
+
+<div class="chatbot-icon">
+    <img src="/static/images/chatbot-icon.png" alt="Chatbot">
+</div>
+
+<div class="quick-actions">
+    <button>Sdílet</button>
+    <button>Oblíbené</button>
+</div>
+
+<div class="eco-friendly-badge">
+    <img src="/static/images/eco-friendly.png" alt="Eco-friendly">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ageCategoryButtons = document.querySelectorAll('.age-category-btn');
+    const ageCategoryContents = document.querySelectorAll('.age-category-content');
+
+    function showCategory(category) {
+        ageCategoryContents.forEach(content => {
+            if (content.dataset.category === category) {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+
+        ageCategoryButtons.forEach(button => {
+            if (button.dataset.category === category) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    ageCategoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            showCategory(this.dataset.category);
+        });
+    });
+
+    // Zobrazit výchozí kategorii (první)
+    showCategory(ageCategoryButtons[0].dataset.category);
+});
+</script>
+{% endblock %}

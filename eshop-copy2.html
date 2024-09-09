@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>Personalizovaná Stránka Produktu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://use.typekit.net/ikz8qig.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/app.be3b0ec2.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/product.f51881d4.css">
+    <style>
+        /* Přidané CSS pro personalizovaný obsah */
+        .personalized-content { margin-top: 20px; }
+        .personalized-content h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
+        .personalized-content p.description { margin-bottom: 10px; }
+        .personalized-content ul.benefits, .personalized-content ul.reviews { list-style-type: none; padding: 0; }
+        .personalized-content ul.benefits li, .personalized-content ul.reviews li { margin-bottom: 5px; }
+        .personalized-content .review-item { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <!-- Zde by měl být obsah hlavičky eshopu -->
+    </header>
+    <main class="main main-product">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <ul class="breadcrumbs">
+                <li><a href="/" title="Zpět na úvod">Úvod</a></li>
+                <li class="active">Personalizovaná Stránka Produktu</li>
+            </ul>
+
+            <!-- Product Main Section -->
+            <div class="row product-main-info">
+                <div class="col-xl-5 col-lg-6 col-md-12 product-gallery-wrapper">
+                    <div class="product-gallery">
+                        <!-- Nahoru Galerie obrázků, alespoň 1 obrázek -->
+                        <div class="product-photo">
+                            <a href="#" data-rel="gallery"> <!-- Uprav tuto URL odkazu na správnou cestu k obrázku -->
+                                <img src="https://data.kralovstvi-tiande.cz/data/tmp/3/3/2403_3.jpg?1699515756_1" alt="Fytogel na nohy Slaviton" class="img-responsive">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="btn-favorites">
+                        <span class="fc icons_heart"></span><span class="text">Přidat mezi oblíbené</span>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-6 col-md-12 product-info">
+                    <h1>Fytogel na nohy Slaviton</h1>
+                    <p class="code">Kód produktu: 44402-1</p>
+                    <div class="review-stars-wrapper">
+                        <div class="review-stars">
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                        </div>
+                        <span class="rating">5</span>
+                        <span class="reviews-count">53x hodnoceno</span>
+                    </div>
+                    <p class="perex">Slaviton TianDe je unikátní chladivý fytogel na nohy, který přináší okamžitou úlevu unaveným, oteklým a těžkým nohám.</p>
+                    <div class="product-price-block">
+                        <p class="price">399 Kč</p>
+                        <p class="price-without-vat">330 Kč&nbsp;bez DPH</p>
+                    </div>
+                    <div class="submit-block">
+                        <input class="form-control" type="number" name="No" title="Počet kusů" value="1" step="1">
+                        <button type="button" class="btn btn-insert">Vložit do košíku</button>
+                    </div>
+                    
+                    <!-- Dropdown pro výběr věkové kategorie -->
+                    <div class="form-group">
+                        <label for="age-category">Vybrat věkovou kategorii:</label>
+                        <select id="age-category" class="form-control">
+                            <option value="12-17">12-17</option>
+                            <option value="18-29">18-29</option>
+                            <option value="30-45">30-45</option>
+                            <option value="46-60">46-60</option>
+                            <option value="61+">61+</option>
+                        </select>
+                    </div>
+
+                    <!-- Personalizovaný obsah -->
+                    <div id="personalized-content" class="personalized-content">
+                        <h2 class="personalized-title"></h2>
+                        <p class="description personalized-description"></p>
+                        <ul class="benefits personalized-benefits"></ul>
+                        <h3>Recenze našich zákazníků</h3>
+                        <ul class="reviews personalized-reviews"></ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Sekce s detaily produktu -->
+            <div id="product-details">
+                <h2>Detailní popis</h2>
+                <p id="detailed-description"></p>
+            </div>
+
+            <!-- Složení a účinky -->
+            <div id="ingredients-and-effects">
+                <h2>Složení a účinky</h2>
+                <ul id="ingredients-list"></ul>
+            </div>
+            
+            <!-- Návod k použití -->
+            <div id="instructions">
+                <h2>Návod k použití</h2>
+                <p id="usage-instructions"></p>
+            </div>
+
+            <!-- Často kladené otázky -->
+            <div id="faq">
+                <h2>Často kladené otázky</h2>
+                <ul id="faq-list"></ul>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <!-- Zde by měl být obsah patičky eshopu -->
+    </footer>
+
+    <script>
+        // Personalizovaná data ve formátu JSON
+        const data = {
+            "společné_části": {
+                "základní_informace": {
+                    "název_produktu": "Fytogel na nohy Slaviton",
+                    "kód_produktu": "44402-1",
+                    "meta_popis": "Slaviton TianDe je unikátní chladivý fytogel na nohy, který přináší okamžitou úlevu unaveným, oteklým a těžkým nohám.",
+                    "cena": {
+                        "s_dph": 399,
+                        "bez_dph": 330
+                    },
+                    "dostupnost": "skladem",
+                    "bodové_ohodnocení": 8.9,
+                    "hodnocení": {
+                        "průměr": 5,
+                        "počet_hodnocení": 53
+                    },
+                    "složení_a_účinky": [
+                        { "složka": "Extrakt z heřmánku", "účinek": "Má silné uklidňující a regenerační účinky. Je vhodný i na velmi citlivou pokožku, urychluje regeneraci kožních buněk." },
+                        { "složka": "Extrakt z kaštanu koňského", "účinek": "Podporuje prokrvení a elasticitu cév a žil. Zmírňuje otoky. Je významným zdrojem aescinu." },
+                        { "složka": "Extrakt z třezalky tečkované", "účinek": "Výrazně podporuje krevní oběh a zklidňuje pokožku. Obsažený rutin posiluje stěny kapilár a zvyšuje pružnost cév." },
+                        { "složka": "Extrakt z vilínu virginského", "účinek": "Napomáhá regeneraci pokožky po podráždění od slunce." },
+                        { "složka": "Mentol", "účinek": "Známý pro své osvěžující chladivé účinky, zklidňuje svědění, podporuje prokrvení pokožky." }
+                    ],
+                    "návod_k_použití": "Naneste tenkou vrstvu gelu na pokožku nohou. Jemně vmasírujte od chodidel směrem nahoru k lýtkům až do úplného vstřebání. Aplikujte 2-3x denně, ideálně po dobu 8 týdnů.",
+                    "technické_informace": {
+                        "objem": "125 ml",
+                        "kód_produktu": "44402-1",
+                        "země_původu": "Čína",
+                        "trvanlivost": "24 měsíců od otevření"
+                    }
+                },
+                "detailní_popis": "Slaviton je inspirován tradiční čínskou medicínou a tisíce let prověřených receptur...",
+                "galerie_obrázků": [
+                    "https://data.kralovstvi-tiande.cz/data/tmp/3/3/2403_3.jpg?1699515756_1",
+                    "https://data.kralovstvi-tiande.cz/data/tmp/3/2/6172_3.jpg?1720796778_1",
+                    "https://data.kralovstvi-tiande.cz/data/tmp/3/2/2402_3.jpg?1699515756_1"
+                ],
+                "video_url": "/videos/products/slaviton_presentation.mp4",
+                "často_kladené_otázky": [
+                    {
+                        "otázka": "Je Slaviton vhodný pro těhotné ženy?",
+                        "odpověď": "Ano, Slaviton je díky svému šetrnému složení s vysokým podílem přírodních ingrediencí vhodný i pro těhotné ženy..."
+                    },
+                    {
+                        "otázka": "Jak často mám Slaviton používat?",
+                        "odpověď": "Doporučujeme používat Slaviton 1-2krát denně, ideálně ráno a večer. Při zvýšené zátěži nebo otocích můžete aplikaci opakovat dle potřeby."
+                    },
+                    {
+                        "otázka": "Mohu Slaviton používat, pokud mám křečové žíly?",
+                        "odpověď": "Ano, Slaviton je vhodný i pro osoby s křečovými žilami. Extrakt z kaštanu koňského obsažený v gelu pomáhá podporovat cirkulaci krve a zmírňovat otoky."
+                    },
+                    {
+                        "otázka": "Zanechává Slaviton na pokožce mastný film?",
+                        "odpověď": "Ne, Slaviton má lehkou, nelepivou texturu, která se rychle vstřebává. Nezanechává mastný film a můžete se ihned po aplikaci obléknout."
+                    }
+                ]
+            },
+            "personalizované_části": {
+                "věkové_kategorie": ["12-17", "18-29", "30-45", "46-60", "61+"],
+                "personalizovaný_obsah": {
+                    "12-17": {
+                        "krátký_popis": "Jemná péče pro mladé aktivní nohy a sportem namáhané svaly.",
+                        "rychlý_přehled": ["Osvěžuje unavené nohy po sportu", "Pomáhá při růstových bolestech", "Bezpečný pro mladou pokožku"],
+                        "klíčové_benefity": ["Ulevuje od únavy po intenzivním tréninku", "Podporuje regeneraci svalů", "Chladivý efekt pro okamžitou úlevu"],
+                        "recenze_zákazníků": [
+                            { "jméno": "Tomáš", "věk": 16, "hodnocení": 5, "text": "Super na unavené nohy po fotbalovém tréninku!" },
+                            { "jméno": "Karolína", "věk": 14, "hodnocení": 5, "text": "Pomáhá mi s bolestmi nohou při růstu. Konečně můžu v noci spát." }
+                        ],
+                        "doporučené_produkty": ["Sportovní balzám na svaly", "Osvěžující sprej na nohy"]
+                    },
+                    "18-29": {
+                        "krátký_popis": "Ideální pro mladé aktivní lidi, kteří tráví hodně času na nohou.",
+                        "rychlý_přehled": ["Okamžitá úleva pro unavené nohy", "Podporuje cirkulaci krve", "Vhodný pro každodenní použití"],
+                        "klíčové_benefity": ["Zmírňuje únavu nohou po dlouhém dni", "Osvěžující účinek pro aktivní životní styl", "Prevence otoku nohou"],
+                        "recenze_zákazníků": [
+                            { "jméno": "Lenka", "věk": 25, "hodnocení": 5, "text": "Příjemně chladí a pomáhá ulevit nohám." },
+                            { "jméno": "Jana", "věk": 28, "hodnocení": 5, "text": "Všestranný pomocník nesmí doma chybět." }
+                        ],
+                        "doporučené_produkty": ["Hydratační krém na nohy", "Relaxační koupelová sůl"]
+                    }
+                    // Přidání dalších věkových kategorií je obdobné...
+                }
+            }
+        };
+
+        // Funkce na vykreslení personalizovaného obsahu
+        function renderPersonalizedContent(ageCategory) {
+            const content = data.personalizované_části.personalizovaný_obsah[ageCategory];
+            if (content) {
+                document.querySelector('.personalized-title').innerText = content.krátký_popis;
+                document.querySelector('.personalized-description').innerText = content.rychlý_přehled.join(", ");
+                const benefitsList = document.querySelector('.personalized-benefits');
+                benefitsList.innerHTML = "";
+                content.klíčové_benefity.forEach(benefit => {
+                    const li = document.createElement('li');
+                    li.innerText = benefit;
+                    benefitsList.appendChild(li);
+                });
+
+                // Render recenze
+                const reviewsList = document.querySelector('.personalized-reviews');
+                reviewsList.innerHTML = "";
+                content.recenze_zákazníků.forEach(review => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${review.jméno} (${review.věk} let)</strong>: ${'<i class="fc icons_star_full"></i>'.repeat(review.hodnocení)} <br> ${review.text}`;
+                    reviewsList.appendChild(li);
+                });
+            }
+        }
+
+        // Inicializace obsahu na základě výchozí věkové kategorie
+        document.getElementById('age-category').addEventListener('change', (event) => {
+            renderPersonalizedContent(event.target.value);
+        });
+
+        // Inicializace s výchozí hodnotou kategorie
+        renderPersonalizedContent(document.getElementById('age-category').value);
+
+        // Funkce na vykreslení společných částí obsahu
+        function renderCommonContent() {
+            document.querySelector("#detailed-description").innerText = data.společné_části.detailní_popis;
+            document.querySelector("#usage-instructions").innerText = data.společné_části.základní_informace.návod_k_použití;
+
+            // Složení a účinky
+            const ingredientsList = document.querySelector("#ingredients-list");
+            data.společné_části.základní_informace.složení_a_účinky.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.složka}:</strong> ${item.účinek}`;
+                ingredientsList.appendChild(li);
+            });
+
+            // Často kladené otázky
+            const faqList = document.querySelector("#faq-list");
+            data.společné_části.často_kladené_otázky.forEach(faq => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${faq.otázka}</strong><br>${faq.odpověď}`;
+                faqList.appendChild(li);
+            });
+        }
+
+        // Zavolání funkce pro vykreslení stálého obsahu
+        renderCommonContent();
+    </script>
+</body>
+</html>

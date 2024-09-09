@@ -1,6 +1,7 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -10,29 +11,36 @@ def setup_assistant():
     with open('prompt.txt', 'r', encoding='utf-8') as f:
         prompt = f.read()
 
-    # 1. Nahrání XLSX souboru do OpenAI
-    with open("products.csv", "rb") as file_content:
+    # Načtení definice funkce
+    with open('function_definition.json', 'r', encoding='utf-8') as f:
+        function_definition = json.load(f)
+
+    # 1. Nahrání HTML souboru s produkty do OpenAI
+    with open("Worksheet.html", "rb") as file_content:  # Změna zpět na Worksheet.html
         file = client.files.create(
             file=file_content,
             purpose='assistants'
         )
-    print(f"File uploaded with ID: {file.id}")
+    print(f"HTML File uploaded with ID: {file.id}")
 
-    # 2. Vytvoření asistenta
+    # 2. Vytvoření asistenta s povoleným code_interpreterem a funkcí
     assistant = client.beta.assistants.create(
         name="Product Description Generator",
-        instructions=prompt + f"\nPlease use the file with ID {file.id} for analysis.",
+        instructions=prompt + f"\nPlease use the file with ID {file.id} for product data and the provided function to generate personalized descriptions. Utilize your extensive knowledge of TianDe products to enhance the descriptions.",
         model="gpt-4-1106-preview",
-        tools=[{"type": "file_search"}]
+        tools=[
+            {"type": "code_interpreter"},
+            {"type": "function", "function": function_definition}
+        ]
     )
     print(f"Assistant created with ID: {assistant.id}")
 
-    # 3. Vytvoření vlákna se zprávou o souboru
+    # 3. Vytvoření vlákna se zprávou pro zpracování dat
     thread = client.beta.threads.create(
         messages=[
             {
                 "role": "user",
-                "content": f"Please analyze the data in the file with ID {file.id}."
+                "content": f"Analyze the product data in the file with ID {file.id} and be ready to generate personalized descriptions using the provided function. Use your knowledge of TianDe products to provide accurate and detailed information."
             }
         ]
     )

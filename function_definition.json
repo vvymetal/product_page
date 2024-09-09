@@ -1,107 +1,111 @@
 {
-    "name": "generate_product_description",
-    "description": "Generuje personalizovaný popis produktu pro všechny věkové skupiny.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "product_id": {
-          "type": "string",
-          "description": "ID produktu, pro který se má vygenerovat popis"
-        }
+  "name": "generate_product_description",
+  "description": "Generuje personalizovaný popis produktu pro všechny věkové skupiny.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "product_id": {
+        "type": "string",
+        "description": "ID produktu, pro který se má vygenerovat popis"
       },
-      "required": ["product_id"]
-    },
-    "returns": {
-      "type": "object",
-      "properties": {
-        "společné_části": {
-          "type": "object",
-          "properties": {
-            "základní_informace": {
-              "type": "object",
-              "properties": {
-                "název_produktu": {"type": "string"},
-                "meta_popis": {"type": "string"},
-                "složení_a_účinky": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "složka": {"type": "string"},
-                      "účinek": {"type": "string"}
-                    }
-                  }
-                },
-                "návod_k_použití": {"type": "string"},
-                "technické_informace": {
-                  "type": "object",
-                  "properties": {
-                    "velikost_balení": {"type": "string"},
-                    "kód_produktu": {"type": "string"},
-                    "země_původu": {"type": "string"},
-                    "trvanlivost": {"type": "string"}
-                  }
-                }
-              }
-            },
-            "detailní_popis": {"type": "string"}
-          }
+      "age_groups": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["12-17", "18-29", "30-45", "46-60", "61+"]
         },
-        "personalizované_části": {
-          "type": "object",
-          "properties": {
-            "12-17": {"$ref": "#/definitions/age_group"},
-            "18-29": {"$ref": "#/definitions/age_group"},
-            "30-45": {"$ref": "#/definitions/age_group"},
-            "46-60": {"$ref": "#/definitions/age_group"},
-            "61+": {"$ref": "#/definitions/age_group"}
-          }
-        }
-      }
-    },
-    "definitions": {
-      "age_group": {
+        "description": "Věkové skupiny, pro které se má vygenerovat popis"
+      },
+      "output_format": {
         "type": "object",
         "properties": {
-          "marketingový_obsah": {
+          "společné_části": {
             "type": "object",
             "properties": {
-              "rychlý_přehled": {"type": "array", "items": {"type": "string"}},
-              "řeší_tyto_potíže": {"type": "array", "items": {"type": "string"}},
-              "klíčové_benefity": {"type": "array", "items": {"type": "string"}},
-              "proč_zvolit_tento_produkt": {"type": "array", "items": {"type": "string"}}
-            }
-          },
-          "doplňující_informace": {
-            "type": "object",
-            "properties": {
-              "často_kladené_otázky": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "otázka": {"type": "string"},
-                    "odpověď": {"type": "string"}
+              "základní_informace": {
+                "type": "object",
+                "properties": {
+                  "název_produktu": {"type": "string"},
+                  "meta_popis": {"type": "string"},
+                  "složení_a_účinky": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "složka": {"type": "string"},
+                        "účinek": {"type": "string"}
+                      }
+                    }
+                  },
+                  "návod_k_použití": {"type": "string"},
+                  "technické_informace": {
+                    "type": "object",
+                    "properties": {
+                      "velikost_balení": {"type": "string"},
+                      "kód_produktu": {"type": "string"},
+                      "země_původu": {"type": "string"},
+                      "trvanlivost": {"type": "string"}
+                    }
                   }
                 }
               },
-              "rady_expertů": {"type": "string"},
-              "personalizační_prvek": {"type": "string"}
+              "detailní_popis": {"type": "string"}
             }
           },
-          "recenze_zákazníků": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "jméno": {"type": "string"},
-                "hodnocení": {"type": "integer"},
-                "text": {"type": "string"}
+          "personalizované_části": {
+            "type": "object",
+            "patternProperties": {
+              "^(12-17|18-29|30-45|46-60|61+)$": {
+                "type": "object",
+                "properties": {
+                  "meta_popisek": {"type": "string"},
+                  "krátký_popis": {"type": "string"},
+                  "detailní_popis": {"type": "string"},
+                  "marketingový_obsah": {
+                    "type": "object",
+                    "properties": {
+                      "rychlý_přehled": {"type": "array", "items": {"type": "string"}},
+                      "řeší_tyto_potíže": {"type": "array", "items": {"type": "string"}},
+                      "klíčové_benefity": {"type": "array", "items": {"type": "string"}},
+                      "proč_zvolit_tento_produkt": {"type": "array", "items": {"type": "string"}}
+                    }
+                  },
+                  "doplňující_informace": {
+                    "type": "object",
+                    "properties": {
+                      "často_kladené_otázky": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "otázka": {"type": "string"},
+                            "odpověď": {"type": "string"}
+                          }
+                        }
+                      },
+                      "rady_expertů": {"type": "string"},
+                      "personalizační_prvek": {"type": "string"}
+                    }
+                  },
+                  "recenze_zákazníků": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "jméno": {"type": "string"},
+                        "hodnocení": {"type": "integer"},
+                        "text": {"type": "string"}
+                      }
+                    }
+                  },
+                  "doporučené_produkty": {"type": "array", "items": {"type": "string"}}
+                }
               }
             }
-          },
-          "doporučené_produkty": {"type": "array", "items": {"type": "string"}}
+          }
         }
       }
-    }
+    },
+    "required": ["product_id", "age_groups", "output_format"]
   }
+}

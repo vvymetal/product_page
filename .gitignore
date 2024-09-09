@@ -11,6 +11,9 @@ __pycache__/
 
 # Ignorovat soubory .env, které mohou obsahovat citlivé informace
 .env
+Worksheet.html
+*.json
+
 
 # Ignorovat logy
 *.log

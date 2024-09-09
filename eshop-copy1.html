@@ -1,0 +1,195 @@
+```html
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>Personalizovaná Stránka Produktu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://use.typekit.net/ikz8qig.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/app.be3b0ec2.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/product.f51881d4.css">
+</head>
+<body>
+    <header class="header">
+        <!-- Zde by měl být obsah hlavičky eshopu -->
+    </header>
+    <main class="main main-product">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <ul class="breadcrumbs">
+                <li><a href="/" title="Zpět na úvod">Úvod</a></li>
+                <li class="active">Personalizovaná Stránka Produktu</li>
+            </ul>
+
+            <!-- Product Main Section -->
+            <div class="row product-main-info">
+                <div class="col-xl-5 col-lg-6 col-md-12 product-gallery-wrapper">
+                    <div class="product-gallery">
+                        <!-- Nahoru Galerie obrázků, alespoň 1 obrázek -->
+                        <div class="product-photo">
+                            <a href="#" data-rel="gallery"> <!-- Uprav tuto URL odkazu na správnou cestu k obrázku -->
+                                <img src="https://data.kralovstvi-tiande.cz/data/tmp/3/3/2403_3.jpg?1699515756_1" alt="Fytogel na nohy Slaviton" class="img-responsive">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="btn-favorites">
+                        <span class="fc icons_heart"></span><span class="text">Přidat mezi oblíbené</span>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-6 col-md-12 product-info">
+                    <h1>Fytogel na nohy Slaviton</h1>
+                    <p class="code">Kód produktu: 44402-1</p>
+                    <div class="review-stars-wrapper">
+                        <div class="review-stars">
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                            <i class="fc icons_star_full"></i>
+                        </div>
+                        <span class="rating">5</span>
+                        <span class="reviews-count">53x hodnoceno</span>
+                    </div>
+                    <p class="perex">Slaviton TianDe je unikátní chladivý fytogel na nohy, který přináší okamžitou úlevu unaveným, oteklým a těžkým nohám.</p>
+                    <div class="product-price-block">
+                        <p class="price">399 Kč</p>
+                        <p class="price-without-vat">330 Kč&nbsp;bez DPH</p>
+                    </div>
+                    <div class="submit-block">
+                        <input class="form-control" type="number" name="No" title="Počet kusů" value="1" step="1">
+                        <button type="button" class="btn btn-insert">Vložit do košíku</button>
+                    </div>
+                    
+                    <!-- Dropdown pro výběr věkové kategorie -->
+                    <div class="form-group">
+                        <label for="age-category">Vybrat věkovou kategorii:</label>
+                        <select id="age-category" class="form-control">
+                            <option value="12-17">12-17</option>
+                            <option value="18-29">18-29</option>
+                            <option value="30-45">30-45</option>
+                            <option value="46-60">46-60</option>
+                            <option value="61+">61+</option>
+                        </select>
+                    </div>
+
+                    <!-- Personalizovaný obsah -->
+                    <div id="personalized-content">
+                        <h2 class="personalized-title"></h2>
+                        <p class="personalized-description"></p>
+                        <ul class="personalized-benefits"></ul>
+                        <p class="personalized-lifestyle"></p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div id="reviews-section" class="reviews-section">
+                <h2>Recenze</h2>
+                <div id="reviews-list"></div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <!-- Zde by měl být obsah patičky eshopu -->
+    </footer>
+
+    <script>
+        // Personalizovaná data ve formátu JSON
+        const data = {
+            "společné_části": {
+                "základní_informace": {
+                    "název_produktu": "Fytogel na nohy Slaviton",
+                    "kód_produktu": "44402-1",
+                    "meta_popis": "Slaviton TianDe je unikátní chladivý fytogel na nohy...",
+                    "cena": {
+                        "s_dph": "399",
+                        "bez_dph": "330"
+                    },
+                    "hodnocení": {
+                        "průměr": 5,
+                        "počet_hodnocení": 53
+                    },
+                    "složení_a_účinky": [
+                        {"složka": "Heřmánek", "účinek": "Uklidňující a regenerační účinky"},
+                        {"složka": "Kaštan koňský", "účinek": "Podporuje prokrvení a elasticitu cév"}
+                    ]
+                }
+            },
+            "personalizované_části": {
+                "12-17": {
+                    "krátký_popis": "Ideální pro dospívající, kteří tráví dlouhé hodiny ve škole.",
+                    "rychlý_přehled": ["Zmírňuje otoky", "Chladí pokožku", "Zklidňuje podráždění"],
+                    "klíčové_benefity": ["Okamžitá úleva", "Přírodní složky", "Vhodné pro každodenní použití"],
+                    "recenze_zákazníků": [
+                        {"jméno": "Petra", "věk": 16, "hodnocení": 5, "text": "Skvělý produkt!"},
+                        {"jméno": "Tomáš", "věk": 17, "hodnocení": 4, "text": "Pomáhá mi s otoky."}
+                    ],
+                    "tiande_lifestyle_text": "Užívejte si život naplno s lehkýma nohama díky Slavitonu."
+                },
+                "18-29": {
+                    "krátký_popis": "Perfektní pro mladé dospělé, kteří vedou aktivní životní styl.",
+                    "rychlý_přehled": ["Posiluje cévy", "Osvěžuje", "Zmírňuje pocit těžkých nohou"],
+                    "klíčové_benefity": ["Pro sportovce", "Přírodní složky", "Rychle účinkuje"],
+                    "recenze_zákazníků": [
+                        {"jméno": "Jana", "věk": 25, "hodnocení": 5, "text": "Opravdu funguje!"},
+                        {"jméno": "Pavel", "věk": 27, "hodnocení": 5, "text": "Používám po každém tréninku."}
+                    ],
+                    "tiande_lifestyle_text": "Udržujte své nohy svěží a zdravé s pravidelným používáním Slavitonu."
+                }
+                // Můžete přidat další věkové kategorie a data zde...
+            }
+        };
+
+        // Funkce na rendering personalizovaného obsahu
+        function renderPersonalizedContent(ageCategory) {
+            const content = data.personalizované_části[ageCategory];
+            if (content) {
+                document.querySelector('.personalized-title').innerText = content.krátký_popis;
+                document.querySelector('.personalized-description').innerText = content.tiande_lifestyle_text;
+                const benefitsList = document.querySelector('.personalized-benefits');
+                benefitsList.innerHTML = "";
+                content.klíčové_benefity.forEach(benefit => {
+                    const li = document.createElement('li');
+                    li.innerText = benefit;
+                    benefitsList.appendChild(li);
+                });
+                
+                // Render recenze
+                const reviewsList = document.querySelector('#reviews-list');
+                reviewsList.innerHTML = "";
+                content.recenze_zákazníků.forEach(review => {
+                    const reviewItem = document.createElement('div');
+                    reviewItem.classList.add('review-item');
+                    reviewItem.innerHTML = `
+                        <div class="review-data">
+                            <div class="review-data-user-wrapper">
+                                <div class="review-avatar"></div>
+                                <div class="review-data-user">
+                                    <div class="review-stars review-stars-${review.hodnocení}">
+                                        ${'<i class="fc icons_star_full"></i>'.repeat(review.hodnocení)}
+                                    </div>
+                                    ${review.jméno}<br>
+                                    <span>${review.věk} let</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            <p class="summary">${review.text}</p>
+                        </div>
+                    `;
+                    reviewsList.appendChild(reviewItem);
+                });
+            }
+        }
+
+        // Inicializace obsahu na základě výchozí věkové kategorie
+        document.getElementById('age-category').addEventListener('change', (event) => {
+            renderPersonalizedContent(event.target.value);
+        });
+
+        // Inicializace s výchozí hodnotou kategorie
+        renderPersonalizedContent(document.getElementById('age-category').value);
+    </script>
+</body>
+</html>

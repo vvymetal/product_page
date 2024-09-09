@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TianDe Hydratační krém s hyaluronem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        header {
+            width: 100%;
+            background-color: #f0f0f0;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .main-content {
+            width: 70%;
+            padding-right: 20px;
+        }
+        .sidebar {
+            width: 30%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        .product-image {
+            width: 100%;
+            height: 400px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #f0f0f0;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .cta-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .sticky-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #ageSelector {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TianDe E-shop</h1>
+        <select id="ageSelector">
+            <option value="12-17">12-17 let</option>
+            <option value="18-29">18-29 let</option>
+            <option value="30-45">30-45 let</option>
+            <option value="46-60">46-60 let</option>
+            <option value="61+">61+ let</option>
+        </select>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <h2>TianDe Hydratační krém s hyaluronem</h2>
+            <div class="product-image">Obrázek produktu</div>
+            <p id="shortDescription">Objevte intenzivní hydrataci s TianDe krémem. Přírodní složení s hyaluronem pro všechny typy pleti. Vaše cesta k zářivé a zdravé pokožce.</p>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="popis">Popis produktu</div>
+                <div class="tab" data-tab="slozeni">Složení a účinky</div>
+                <div class="tab" data-tab="navod">Návod k použití</div>
+                <div class="tab" data-tab="recenze">Recenze</div>
+            </div>
+
+            <div id="popis" class="tab-content active">
+                <h3>Detailní popis</h3>
+                <p id="detailDescription"></p>
+                <h4>Řeší tyto potíže</h4>
+                <ul id="problemsList"></ul>
+                <h4>Klíčové benefity</h4>
+                <ul id="benefitsList"></ul>
+            </div>
+
+            <div id="slozeni" class="tab-content">
+                <h3>Složení a účinky</h3>
+                <ul>
+                    <li><strong>Hyaluronová kyselina:</strong> Intenzivní hydratace a vyplnění jemných vrásek</li>
+                    <li><strong>Aloe Vera:</strong> Zklidnění a regenerace pokožky</li>
+                    <li><strong>Vitamín E:</strong> Antioxidační ochrana a podpora elasticity pleti</li>
+                    <li><strong>Bambucké máslo:</strong> Výživa a ochrana pokožky</li>
+                </ul>
+            </div>
+
+            <div id="navod" class="tab-content">
+                <h3>Návod k použití</h3>
+                <p>Naneste malé množství krému na očištěnou pleť ráno a večer. Jemně vmasírujte krouživými pohyby do úplného vstřebání. Pro optimální výsledky používejte pravidelně jako součást vaší denní a noční rutiny péče o pleť.</p>
+            </div>
+
+            <div id="recenze" class="tab-content">
+                <h3>Recenze zákazníků</h3>
+                <div id="reviewsList"></div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <h3>Shrnutí produktu</h3>
+            <ul id="quickOverview"></ul>
+            <p><strong>Cena:</strong> 599 Kč</p>
+            <button class="cta-button">Přidat do košíku</button>
+        </div>
+    </div>
+
+    <div class="sticky-bottom">
+        <span><strong>TianDe Hydratační krém s hyaluronem</strong></span>
+        <span><strong>Cena:</strong> 599 Kč</span>
+        <button class="cta-button">Koupit nyní</button>
+    </div>
+
+    <script>
+    const productData = {
+        "12-17": {
+            shortDescription: "Lehká, nemastná textura ideální pro mladou pleť. Hydratuje bez ucpávání pórů a podporuje zdravý vzhled pleti.",
+            detailDescription: "TianDe Hydratační krém s hyaluronem je speciálně navržen pro potřeby mladé pleti. Tento lehký, rychle se vstřebávající krém poskytuje vyváženou hydrataci bez nadměrného maštění. Pomáhá regulovat tvorbu kožního mazu a předchází vzniku nedokonalostí, typických pro dospívající pleť.",
+            problemsList: [
+                "Suchá a dehydratovaná pleť",
+                "Mastná T-zóna",
+                "První známky únavy pleti"
+            ],
+            benefitsList: [
+                "Vyvažuje hydrataci pleti bez nadměrného maštění",
+                "Pomáhá předcházet tvorbě akné",
+                "Dodává pleti svěží a zdravý vzhled"
+            ],
+            quickOverview: [
+                "Lehká, nemastná textura ideální pro mladou pleť",
+                "Hydratuje bez ucpávání pórů",
+                "Podporuje zdravý a čistý vzhled pleti"
+            ],
+            reviews: [
+                {name: "Karolína, 16 let", rating: 5, text: "Konečně krém, který mě nenutí vypadat jako diskotéková koule! Hydratuje, ale nezanechává mastný film. Moje pleť vypadá svěže a zdravě."},
+                {name: "Tomáš, 17 let", rating: 4, text: "Skvělý krém na problematickou pleť. Pomohl mi snížit tvorbu akné a pleť se mi celkově zklidnila."}
+            ]
+        },
+        "18-29": {
+            shortDescription: "Intenzivní hydratace pro mladou dospělou pleť. Prevence prvních jemných linek a podpora přirozené záře pleti.",
+            detailDescription: "TianDe Hydratační krém s hyaluronem poskytuje mladé dospělé pleti intenzivní hydrataci a ochranu. Tento lehký krém rychle proniká do pokožky, kde účinně bojuje proti prvním jemným linkám a podporuje přirozenou zářivost pleti. Je ideální pro aktivní životní styl a poskytuje dlouhotrvající hydrataci po celý den.",
+            problemsList: [
+                "Dehydratace způsobená stresem a životním stylem",
+                "První jemné linky",
+                "Ztráta přirozeného jasu pleti"
+            ],
+            benefitsList: [
+                "Dlouhotrvající hydratace po celý den",
+                "Vypíná a rozjasňuje pleť",
+                "Chrání před předčasným stárnutím"
+            ],
+            quickOverview: [
+                "Intenzivní hydratace pro mladou dospělou pleť",
+                "Prevence prvních jemných linek",
+                "Podpora přirozené záře pleti"
+            ],
+            reviews: [
+                {name: "Lucie, 27 let", rating: 5, text: "Tento krém je můj záchrance! Perfektně hydratuje mou smíšenou pleť a skvěle funguje i pod make-upem. Pleť mám celý den svěží a zářivou."},
+                {name: "Jan, 24 let", rating: 4, text: "Konečně jsem našel krém, který není příliš těžký, ale stále poskytuje dostatečnou hydrataci. Moje pleť vypadá zdravěji a cítím se sebevědoměji."}
+            ]
+        },
+        "30-45": {
+            shortDescription: "Intenzivní hydratace a anti-aging péče. Redukce jemných linek a prvních vrásek, podpora pružnosti a pevnosti pleti.",
+            detailDescription: "TianDe Hydratační krém s hyaluronem je komplexní péče pro náročnou pleť ve věku 30-45 let. Tento krém intenzivně hydratuje, stimuluje produkci kolagenu a účinně redukuje jemné linky a první vrásky. Zlepšuje celkový tón a texturu pleti, podporuje její pružnost a pevnost.",
+            problemsList: [
+                "Viditelné známky stárnutí",
+                "Ztráta elasticity pleti",
+                "Nerovnoměrný tón pleti"
+            ],
+            benefitsList: [
+                "Stimuluje produkci kolagenu",
+                "Vyplňuje jemné vrásky",
+                "Zlepšuje celkový tón a texturu pleti"
+            ],
+            quickOverview: [
+                "Intenzivní hydratace a anti-aging péče",
+                "Redukce jemných linek a prvních vrásek",
+                "Podpora pružnosti a pevnosti pleti"
+            ],
+            reviews: [
+                {name: "Petra, 38 let", rating: 5, text: "Tento krém je skutečný zázrak! Po měsíci používání vidím výrazné zlepšení textury pleti a jemné vrásky kolem očí jsou méně viditelné. Cítím se sebevědoměji než kdy dřív."},
+                {name: "Martin, 42 let", rating: 5, text: "Nikdy jsem nebyl fanouškem složité péče o pleť, ale tento krém mě přesvědčil. Je jednoduchý na použití a výsledky jsou opravdu viditelné. Moje pleť vypadá odpočatě, i když mám za sebou náročný týden."}
+            ]
+        },
+        "46-60": {
+            shortDescription: "Intenzivní anti-aging péče pro zralou pleť. Hluboká hydratace a výživa, podpora hustoty a pevnosti pleti.",
+            detailDescription: "TianDe Hydratační krém s hyaluronem je vysoce účinná anti-aging péče pro zralou pleť. Tento krém poskytuje intenzivní hydrataci a výživu, viditelně redukuje hloubku vrásek a zlepšuje pevnost a pružnost pleti. S koncentrovanými aktivními složkami podporuje přirozenou obnovu pleti během noci a je vhodný i pro velmi suchou a citlivou pleť.",
+            problemsList: [
+                "Výrazné vrásky a ztráta elasticity",
+                "Suchá a unavená pleť",
+                "Nerovnoměrný tón a pigmentové skvrny"
+            ],
+            benefitsList: [
+                "Viditelně redukuje hloubku vrásek",
+                "Zlepšuje pevnost a pružnost pleti",
+                "Rozjasňuje a sjednocuje tón pleti"
+            ],
+            quickOverview: [
+                "Intenzivní anti-aging péče pro zralou pleť",
+                "Hluboká hydratace a výživa",
+                "Podpora hustoty a pevnosti pleti"
+            ],
+            reviews: [
+                {name: "Jana, 55 let", rating: 5, text: "Tento krém je úžasný! Po několika týdnech používání cítím, že moje pleť je mnohem hydratovanější a pružnější. Vrásky jsou méně viditelné a pleť má celkově zdravější vzhled."},
+                {name: "Pavel, 58 let", rating: 4, text: "Jsem příjemně překvapen účinky tohoto krému. Moje pleť se cítí hydratovaná a vypadá odpočatě. Oceňuji, že se rychle vstřebává a nezanechává mastný film."}
+            ]
+        },
+        "61+": {
+            shortDescription: "Luxusní péče pro velmi zralou pleť. Intenzivní hydratace, výživa a podpora regenerace pleti.",
+            detailDescription: "TianDe Hydratační krém s hyaluronem je skutečným pokladem pro velmi zralou pleť. Poskytuje hlubokou hydrataci, která pomáhá vyplňovat hluboké vrásky, podporuje elasticitu pleti a dodává jí komfort a hebkost. Tento krém je speciálně formulován pro potřeby pleti ve věku 61 a více let, pomáhá obnovovat vitalitu a jas unavené pleti.",
+            problemsList: [
+                "Velmi suchá a citlivá pleť",
+                "Hluboké vrásky a ztráta objemu",
+                "Ztráta jasu a vitality pleti"
+            ],
+            benefitsList: [
+                "Poskytuje hlubokou hydrataci a výživu",
+                "Pomáhá vyplňovat hluboké vrásky",
+                "Podporuje elasticitu a vitalitu pleti"
+            ],
+            quickOverview: [
+                "Luxusní péče pro velmi zralou pleť",
+                "Intenzivní hydratace a výživa",
+                "Podpora regenerace a vitality pleti"
+            ],
+            reviews: [
+                {name: "Marie, 72 let", rating: 5, text: "Tento krém je pro mou pleť jako zázrak. Cítím okamžitou úlevu od suchosti a pleť vypadá viditelně mladší. Je to první krém, který skutečně funguje na mé hluboké vrásky."},
+                {name: "Jiří, 68 let", rating: 5, text: "Manželka mi tento krém koupila a musím říct, že jsem nadšený. Pleť mám mnohem jemnější a hydratovanější. Dokonce i moje dcera si všimla, že vypadám odpočatě!"}
+            ]
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const ageSelector = document.getElementById('ageSelector');
+        const shortDescription = document.getElementById('shortDescription');
+        const detailDescription = document.getElementById('detailDescription');
+        const problemsList = document.getElementById('problemsList');
+        const benefitsList = document.getElementById('benefitsList');
+        const quickOverview = document.getElementById('quickOverview');
+        const reviewsList = document.getElementById('reviewsList');
+
+        function updateContent(age) {
+            const data = productData[age];
+            shortDescription.textContent = data.shortDescription;
+            detailDescription.textContent = data.detailDescription;
+            problemsList.innerHTML = data.problemsList.map(item => `<li>${item}</li>`).join('');
+            benefitsList.innerHTML = data.benefitsList.map(item => `<li>${item}</li>`).join('');
+            quickOverview.innerHTML = data.quickOverview.map(item => `<li>${item}</li>`).join('');
+            reviewsList.innerHTML = data.reviews.map(review => `
+                <div>
+                    <h4>${review.name} - ${review.rating}/5 hvězdiček</h4>
+                    <p>${review.text}</p>
+                </div>
+            `).join('');
+        }
+
+        ageSelector.addEventListener('change', (e) => updateContent(e.target.value));
+
+        // Inicializace s první věkovou kategorií
+        updateContent('12-17');
+
+        // Přepínání záložek
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab, .tab-content').forEach(el => el.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+    });
+    </script>
+</body>
+</html>
