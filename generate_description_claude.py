@@ -13,23 +13,14 @@ if "ANTHROPIC_API_KEY" not in os.environ:
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
-# Funkce load_product_data a load_prompt zůstávají beze změny
-
-
 def load_product_data(csv_file):
     product_data = {}
     with open(csv_file, 'r', encoding='utf-8') as file:
-        # Nejprve zjistíme, jaký oddělovač je použit
         dialect = csv.Sniffer().sniff(file.read(1024))
         file.seek(0)
         
         reader = csv.DictReader(file, dialect=dialect)
         
-        # Vypíšeme názvy sloupců pro debugging
-        #print("Názvy sloupců v CSV souboru:")
-        #print(reader.fieldnames)
-        
-        # Pokusíme se najít sloupec, který by mohl obsahovat kód produktu
         id_column = next((col for col in reader.fieldnames if 'kód' in col.lower() or 'code' in col.lower() or 'id' in col.lower()), None)
         
         if not id_column:
@@ -48,18 +39,13 @@ def load_prompt():
     with open('prompt.txt', 'r', encoding='utf-8') as f:
         return f.read()
 
-
 def parse_json_response(response_text):
-    """Pokusí se najít a parsovat JSON odpověď v textu."""
     try:
-        # Hledáme text mezi prvními složenými závorkami
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
         if json_match:
             json_str = json_match.group()
-
-            print("vyhledaný json:")
+            print("Vyhledaný JSON:")
             print(json_str)
-
             return json.loads(json_str)
         else:
             print("Nepodařilo se najít JSON v odpovědi.")
@@ -70,11 +56,16 @@ def parse_json_response(response_text):
         print(f"Problematická část: {json_str if 'json_str' in locals() else 'N/A'}")
         return None
 
-
+def validate_json(data):
+    try:
+        json.dumps(data)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 def generate_common_parts(product_info, base_prompt):
     prompt = f"""
-    \n\nHuman:Na základě následujících informací o produktu vygenerujte společné části popisu.Ujistěte se, že výstup je validní JSON a neobsahuje žádný další text:
+    \n\nHuman: Na základě následujících informací o produktu vygenerujte společné části popisu. Ujistěte se, že výstup je validní JSON a neobsahuje žádný další text:
     
     {json.dumps(product_info, ensure_ascii=False, indent=2)}
     
@@ -124,14 +115,14 @@ def generate_common_parts(product_info, base_prompt):
 
 def generate_personalized_part(product_info, base_prompt, age_category):
     prompt = f"""
-    \n\nHuman:Na základě následujících informací o produktu vygenerujte personalizovanou část popisu pro věkovou kategorii {age_category}:
+    \n\nHuman: Na základě následujících informací o produktu vygenerujte personalizovanou část popisu pro věkovou kategorii {age_category}:
     
     {json.dumps(product_info, ensure_ascii=False, indent=2)}
     
     Použijte tento základní prompt:
     {base_prompt}
     
-    Generujte pouze část pro danou věkovou kategorii v následujícím JSON formátu.Ujistěte se, že výstup je validní JSON a neobsahuje žádný další text:
+    Generujte pouze část pro danou věkovou kategorii v následujícím JSON formátu. Ujistěte se, že výstup je validní JSON a neobsahuje žádný další text:
     {{
       "věková_kategorie": "{age_category}",
       "meta_popisek": "",
@@ -163,14 +154,14 @@ def generate_personalized_part(product_info, base_prompt, age_category):
         max_tokens_to_sample=4000,
         temperature=0.5
     )
-    print("Odpověď pro společné části:")
+    print(f"Odpověď pro věkovou kategorii {age_category}:")
     print(response.completion)
 
     return parse_json_response(response.completion)
 
 def generate_additional_info(product_info, base_prompt):
     prompt = f"""
-    \n\nHuman:Na základě následujících informací o produktu vygenerujte dodatečné informace:
+    \n\nHuman: Na základě následujících informací o produktu vygenerujte dodatečné informace:
     
     {json.dumps(product_info, ensure_ascii=False, indent=2)}
     
@@ -201,41 +192,58 @@ def generate_additional_info(product_info, base_prompt):
         max_tokens_to_sample=500,
         temperature=0.5
     )
-    print("Odpověď pro společné části:")
+    print("Odpověď pro dodatečné informace:")
     print(response.completion)
     return parse_json_response(response.completion)
 
 def combine_parts(common_parts, personalized_parts, additional_info):
     return {
-        "společné_části": common_parts["společné_části"],
-        "personalizované_části": personalized_parts,
-        "dodatečné_informace": additional_info["dodatečné_informace"]
+        "společné_části": common_parts,
+        "personalizované_části": personalized_parts,  # Zde je změna
+        "dodatečné_informace": additional_info
     }
 
 def generate_description(product_id, product_info, base_prompt):
     try:
         common_parts = generate_common_parts(product_info, base_prompt)
-        if not common_parts:
-            raise Exception("Nepodařilo se vygenerovat společné části")
+        if not common_parts or not validate_json(common_parts):
+            raise Exception("Nepodařilo se vygenerovat platné společné části")
+        
+        print("Společné části úspěšně vygenerovány")
         
         personalized_parts = []
-        for age_category in ["12-17", "18-29", "30-45", "46-60", "61+"]:
+#        for age_category in ["12-17", "18-29", "30-45", "46-60", "61+"]:
+        for age_category in ["12-17", "18-29"]:
             part = generate_personalized_part(product_info, base_prompt, age_category)
-            if not part:
-                raise Exception(f"Nepodařilo se vygenerovat personalizovanou část pro kategorii {age_category}")
+            if not part or not validate_json(part):
+                raise Exception(f"Nepodařilo se vygenerovat platnou personalizovanou část pro kategorii {age_category}")
             personalized_parts.append(part)
+            print(f"Personalizovaná část pro kategorii {age_category} úspěšně vygenerována")
         
-        additional_info = ""
-        #generate_additional_info(product_info, base_prompt)
-        #if not additional_info:
-        #    raise Exception("Nepodařilo se vygenerovat dodatečné informace")
+        additional_info = """{{
+      "tiande_komunita": {{
+        "social_media_links": [],
+        "user_generated_content": []
+      }},
+      "vzdělávací_sekce": {{
+        "název_kurzu": "",
+        "popis_kurzu": "",
+        "url": ""
+      }},
+      "newsletter_signup": {{
+        "nadpis": "",
+        "popis": ""
+      }}
+    }}"""
+#        additional_info = generate_additional_info(product_info, base_prompt)
+        if not additional_info or not validate_json(additional_info):
+            raise Exception("Nepodařilo se vygenerovat platné dodatečné informace")
         
-        # Spojení všech částí do finálního JSON objektu
-        print("před spojením částí")
-        print(common_parts)
-        print(personalized_parts)
+        print("Všechny části úspěšně vygenerovány, začínám spojování")
         
         final_description = combine_parts(common_parts, personalized_parts, additional_info)
+        
+        print("Části úspěšně spojeny")
         
         return final_description
     except Exception as e:
@@ -257,14 +265,7 @@ def main():
     
     base_prompt = load_prompt()
 
-    # Vypíšeme několik prvních klíčů ze slovníku product_data pro kontrolu
-    #print("První produkty v datovém souboru:")
-    #for i, (key, value) in enumerate(list(product_data.items())[:5]):
-    #    print(f"{key}: {value.get('Název', 'N/A')}")
-    #    if i >= 4:
-    #        break
-
-    product_ids = ["30221"]  # Nahraďte skutečnými ID produktů
+    product_ids = ["20116"]  # Nahraďte skutečnými ID produktů
 
     for product_id in product_ids:
         if product_id in product_data:
