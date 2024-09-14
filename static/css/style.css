@@ -1,223 +1,321 @@
+/* Základní styly */
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    background-color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #2c2c2c;
 }
 
-.product-page {
+.container {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
 }
 
-.product-main {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.product-gallery {
-    flex: 0 0 40%;
-}
-
-.product-info {
-    flex: 0 0 60%;
-}
-
-.main-image {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.main-image img {
-    width: 100%;
-    height: auto;
-}
-
-.badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #ff6b6b;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
-
-.thumbnail-gallery {
-    display: flex;
-    gap: 10px;
-}
-
-.thumbnail-gallery img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-}
-
-.product-360 {
-    margin-top: 10px;
-    text-align: center;
-    color: #4a4a4a;
-}
-
+/* Nadpisy */
 h1 {
+    margin-bottom: 0.2em;
+    margin-top: 0.5em;
+}
+
+h2 {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
     font-size: 24px;
-    margin-bottom: 15px;
 }
 
-.price {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+/* Rozložení stránky */
+.left-column {
+    float: left;
+    width: 45%;
+    padding-right: 40px;
 }
 
-.rating {
-    margin-bottom: 15px;
+.main-column {
+    width: 55%;
 }
 
-.availability {
-    margin-bottom: 15px;
-    color: #4CAF50;
-}
-
-.age-category-selector {
-    margin-bottom: 20px;
-}
-
-.age-category-btn {
-    padding: 10px 15px;
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.age-category-btn:hover {
-    background-color: #e0e0e0;
-}
-
-.age-category-btn.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.cta-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.cta-button:hover {
-    background-color: #45a049;
-}
-
-.loyalty-points {
-    margin-top: 15px;
-    font-style: italic;
-    color: #888;
-}
-
-.age-category-content {
-    display: none;
-    margin-top: 30px;
-}
-
-.age-category-content.active {
-    display: block;
-}
-
-.tiande-lifestyle {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.tiande-lifestyle img {
-    width: 50px;
-    margin-right: 15px;
-}
-
-.quick-overview, .key-benefits {
+.section {
     margin-bottom: 30px;
 }
 
-.quick-overview ul, .key-benefits ul {
-    padding-left: 20px;
-}
-
-.reviews .review {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-}
-
-.faq-item {
-    margin-bottom: 20px;
-}
-
-.faq-item h4 {
-    margin-bottom: 5px;
-}
-
-.sticky-nav {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    padding: 10px 0;
-    margin-bottom: 20px;
+/* Galerie produktů */
+.product-gallery {
     display: flex;
-    justify-content: space-around;
-    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.sticky-nav a {
-    text-decoration: none;
-    color: #333;
+.product-photo, .product-thumbnail {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+}
+
+.product-photo img, .product-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+.product-photo:hover img, .product-thumbnail:hover img {
+    transform: scale(1.1);
+}
+
+.product-thumbnails {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.product-thumbnail {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.product-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* Badges */
+.badge {
     padding: 5px 10px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    
 }
 
-section {
-    margin-bottom: 40px;
+.badge-sale {
+    top: 10px;
+    left: 10px;
+    background-color: #dc3545;
+    color: white;
 }
 
-.chatbot-icon, .quick-actions, .eco-friendly-badge {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
+.badge-points {
+    top: 10px;
+    right: 10px;
+    background-color: #8a2be2;
+    color: white;
 }
 
-.quick-actions {
-    bottom: 80px;
+.badge-discount {
+    top: 40px;
+    left: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid #dc3545;
 }
 
-.eco-friendly-badge {
-    bottom: 140px;
+.badge-stock {
+    background-color: #ffc107;
+    color: black;
 }
 
-@media (max-width: 768px) {
-    .product-main {
-        flex-direction: column;
-    }
+/* Tlačítka a formulářové prvky */
+.age-button {
+    padding: 8px 15px;
+    margin-right: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    .product-gallery, .product-info {
-        flex: 0 0 100%;
-    }
+.age-button.active {
+    background-color: #007bff;
+    color: white;
+}
 
-    .sticky-nav {
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
+.btn-insert {
+    background-color: #69004d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 44px;
+    cursor: pointer;
+    margin-left: 20px;
+}
 
-    .sticky-nav a {
-        flex: 0 0 auto;
-        white-space: nowrap;
-    }
+.form-control {
+    width: 50px;
+    text-align: center;
+    margin: 0 10px;
+}
+
+/* Cena a dostupnost */
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.price-without-vat {
+    font-size: 1rem;
+    color: #666;
+}
+
+.availability {
+    color: #28a745;
+}
+
+/* Počítadlo produktů */
+.product-buy-count-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.buy_count {
+    display: flex;
+    align-items: center;
+}
+
+.buy_count button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Recenze */
+.review {
+    margin-bottom: 10px;
+}
+
+.review p {
+    margin-bottom: 0px;
+}
+
+.review-stars-wrapper {
+    margin-bottom: 10px;
+}
+
+.review-stars {
+    color: #EC8074;
+}
+
+.review-stars-empty {
+    color: #F8DAD8;
+}
+
+/* TianDe Lifestyle sekce */
+.tiande-lifestyle {
+    background-color: #fdeae9;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 20px 0;
+    position: relative;
+    padding-top: 20px;
+    padding-right: 154px;
+}
+
+.tiande-logo {
+    position: absolute;
+    top: -2px;
+    right: 10px;
+    width: 113px;
+    height: auto;
+}
+
+/* Aktuálně prohlížející */
+.currently-watching {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.currently-watching__icon {
+    width: 10px;
+    height: 10px;
+    background-color: #EC8074;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.currently-watching__icon:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f8dad8;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.currently-watching__text {
+    font-size: 14px;
+    color: #333;
+}
+
+.currently-watching__number {
+    font-weight: bold;
+    color: #EC8074;
+}
+
+/* Vlastnosti produktu */
+.product__info-qualities {
+    display: flex;
+    gap: 40px;
+    justify-content: left;
+    margin: 0 0 16px;
+}
+
+/* Personalizovaný obsah */
+#personalized-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#personalized-content li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+#personalized-content li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('/static/images/checkmark.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Funkce produktu */
+.product-features {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.feature img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
 }

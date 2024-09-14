@@ -1,188 +1,1077 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>{{ product.společné_části.základní_informace.název_produktu }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://use.typekit.net/ikz8qig.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/app.be3b0ec2.css">
+    <link rel="stylesheet" href="https://data.kralovstvi-tiande.cz/web/build/product.f51881d4.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        .product-gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+        .product-photo, .product-thumbnail { width: 100%; height: auto; overflow: hidden; position: relative; border-radius: 10px; }
+        .product-photo img, .product-thumbnail img { width: 100%; height: auto; object-fit: cover; transition: transform 0.3s ease; border-radius: 10px; }
+        .product-photo:hover img, .product-thumbnail:hover img { transform: scale(1.1); }
+        .badge-points { top: 10px; right: 10px; background-color: #69004d; color: white; }
+        .badge-stock { top: 70px; left: 10px; background-color: #ffc107; color: black; }
+        .availability { color: #28a745;  }
+        .age-button { padding: 8px 15px; margin-right: 5px; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .age-button.active { background-color: #007bff; color: white; }
+        .tiande-lifestyle { background-color: #fdeae9; padding: 15px; border-radius: 20px; margin: 20px 0; }
+        .section { margin-bottom: 30px; }
+        .container { display: flex; flex-wrap: wrap; }
+        .left-column { float: left; width: 45%; padding-right: 40px; }
+        .main-column { width: 55%; }
+        .product-thumbnails { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; }
+        .product-thumbnail { width: 60px; height: 60px; flex-shrink: 0; }
+        .product-thumbnail img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .review-avatar { width: 60px; height: 60px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+        .review-avatar::before { content: '\1F464'; font-size: 30px; color: #999; }
+        #personalized-content h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; margin-top:20px}
+        .age-buttons { margin-bottom: 20px; }
+        .submit-block { margin: 20px 0;    
+                        max-width: 500px;
+        }
+        body {
+            padding-top:60px;
+            background-color: #fff;
+            --font-family: Satoshi, serif;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #2c2c2c;}
+        h1 {    margin-bottom: 0.2em;
+        margin-top: 0.5em; 
+    font-size:35px}
+        h2 {    margin-bottom: 0.5em;
+            margin-top: 0.5em; 
+        font-size:24px;}
 
-{% block content %}
-<div class="product-page">
-    <div class="product-main">
-        <div class="product-gallery">
-            <div class="main-image">
-                <img src="{{ product.společné_části.základní_informace.hlavní_obrázek }}" alt="{{ product.společné_části.základní_informace.název_produktu }}">
-                <span class="badge">Novinka</span>
-            </div>
-            <div class="thumbnail-gallery">
-                {% for image in product.společné_části.galerie_obrázků %}
-                <img src="{{ image }}" alt="Náhled produktu">
-                {% endfor %}
-            </div>
-            <div class="product-360">360° prohlídka</div>
-        </div>
-        <div class="product-info">
-            <h1>{{ product.společné_části.základní_informace.název_produktu }}</h1>
-            <div class="price">{{ product.společné_části.základní_informace.cena.s_dph }} Kč</div>
-            <div class="rating">
-                <span class="stars">⭐⭐⭐⭐⭐</span>
-                <span class="review-count">({{ product.společné_části.základní_informace.hodnocení.počet_hodnocení }} hodnocení)</span>
-            </div>
-            <div class="availability">{{ product.společné_části.základní_informace.dostupnost }}</div>
-            <div class="age-category-selector">
-                {% for category in product.personalizované_části.věkové_kategorie %}
-                <button class="age-category-btn" data-category="{{ category }}">{{ category }} let</button>
-                {% endfor %}
-            </div>
-            <button class="cta-button">Přidat do košíku</button>
-            <div class="loyalty-points">Získejte {{ product.společné_části.základní_informace.bodové_ohodnocení }} bodů do věrnostního programu</div>
-        </div>
-    </div>
+        .btn-insert {
+            background-color: #69004d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 44px;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+        .price { font-size: 1.5rem; font-weight: bold; margin-bottom:20px;margin-top:20px}
+        .price-without-vat { font-size: 1rem; color: #666; }
+        .product-buy-count-wrapper { display: flex; align-items: center; margin-bottom: 10px; }
+        .buy_count { display: flex; align-items: center; }
+        .buy_count button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+        .form-control { width: 50px; text-align: center; margin: 0 10px; }
+        .product-features {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .feature {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .feature img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 5px;
+    }
+    #personalized-content ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    #personalized-content li {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 10px;
+    }
+    #personalized-content li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        background-image: url('/static/images/checkmark.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    .tiande-lifestyle {
+    position: relative;
+    padding-top: 20px;
+    padding-right: 154px;
+    }
+    .tiande-logo {
+    position: absolute;
+    top: -2px;
+    right: 10px;
+    width: 113px;
+    height: auto;
+}
+.main {
+        padding-top:20px;
+}
+
+.review {margin-bottom: 10px;}
+.review p {margin-bottom: 0px;}
+
+.review-stars-wrapper {margin-bottom:10px}
+.product__info-qualities {
+    display: flex;
+    gap: 40px;
+    justify-content: left;
+    margin: 0 0 16px;
+}
+
+.currently-watching {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.currently-watching__icon {
+    width: 10px;
+    height: 10px;
+    background-color: #EC8074;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.currently-watching__icon:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f8dad8;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.currently-watching__text {
+    font-size: 14px;
+    color: #333;
+}
+
+.currently-watching__number {
+    font-weight: bold;
+    color: #EC8074;
+}
+.review-stars {
+    color: #EC8074;
+}
+.review-stars-empty {
+    color: #F8DAD8; /* Světlejší odstín stejné barvy */
+}
+
+.title-and-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.title-and-badge h1 {
+    margin: 0;
+}
+
+.badge-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.badge-- {
+    padding: 5px 10px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.badge-sale {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-discount {
+    background-color: white;
+    color: black;
+    border: 1px solid #dc3545;
+}
+
+.badge-points {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #69004d;
+    color: white;
+}
+
+.badge-stock {
+    background-color: #ffc107;
+    color: black;
+}
+
+.product-photo {
+    position: relative;
+    /* ostatní styly zůstávají stejné */
+
+}
+
+.product-photo {
+        position: relative;
+        /* ostatní styly zůstávají stejné */
+    }
+
+    .badge-container {
+        position: absolute;
+        width:200px;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 25px;
+        font-size: 0.8rem;
+    }
+
+    .badge-sale {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .badge-discount {
+        background-color: white;
+        color: black;
+        border: 1px solid #dc3545;
+    }
+
+    .badge-points {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #69004d;
+        color: white;
+    }
+
+/* Nové styly pro překrytí */
+.product-photo::after, .product-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(200, 200, 200, 0.2); /* Velmi světle šedá s nízkou opacitou */
+            pointer-events: none; /* Aby bylo možné klikat skrz překrytí */
+        }
+
+        .title-and-badge {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .title-and-badge h1 {
+        margin: 0;
+        flex: 1;
+        max-width: calc(100% - 120px); /* Upravte tuto hodnotu podle potřeby */
     
-    <div id="personalized-content">
-        {% for category in product.personalizované_části.věkové_kategorie %}
-        <div class="age-category-content" data-category="{{ category }}">
-            <h2>Obsah pro věkovou kategorii {{ category }} let</h2>
-            <p class="short-description">{{ product.personalizované_části.personalizovaný_obsah[category].krátký_popis }}</p>
-            <div class="tiande-lifestyle">
-                <img src="/static/images/tiande-lifestyle.png" alt="Tiande Lifestyle">
-                <p>{{ product.personalizované_části.personalizovaný_obsah[category].tiande_lifestyle_text }}</p>
-            </div>
-            <div class="quick-overview">
-                <h3>Rychlý přehled</h3>
-                <ul>
-                    {% for item in product.personalizované_části.personalizovaný_obsah[category].rychlý_přehled %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="key-benefits">
-                <h3>Klíčové benefity</h3>
-                <ul>
-                    {% for item in product.personalizované_části.personalizovaný_obsah[category].klíčové_benefity %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="reviews">
-                <h3>Recenze zákazníků</h3>
-                {% for review in product.personalizované_části.personalizovaný_obsah[category].recenze_zákazníků %}
-                <div class="review">
-                    <p><strong>{{ review.jméno }}</strong> - {{ review.hodnocení }}/5</p>
-                    <p>{{ review.text }}</p>
+    }
+
+    .badge-stock {
+        background-color: #ffc107;
+        color: black;
+        padding: 5px 10px;
+        border-radius: 25px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+   
+.variant-container {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin-bottom: 40px
+}
+
+.variant-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.variant-best-value {
+    border: 2px solid #ff6b6b;
+    background-color: #fff0f0;
+}
+
+.variant-best-value-label {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff6b6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.variant-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.variant-radio {
+    margin-right: 10px;
+}
+
+.variant-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.variant-tag-container {
+    display: flex;
+    gap: 5px;
+}
+
+.variant-tag {
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 10px;
+    
+}
+
+.variant-tag-save {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.variant-tag-price {
+    background-color: #ff6b6b;
+    color: white;
+}
+.variant-header {
+   font-size:15px;
+   font-weight: bold;
+}
+.variant-price-container {
+    text-align: right;
+}
+
+.variant-price-original {
+    color: #999;
+    margin-right: 5px;
+    text-decoration: line-through;
+}
+
+.variant-price-final {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
+.variant-item {
+    transition: box-shadow 0.3s ease;
+}
+
+.variant-item.selected {
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.variant-radio {
+    display: none; /* Skryjeme původní radio button */
+}
+
+.variant-radio-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.variant-radio:checked + .variant-radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+}
+
+.left-column {
+    float: left;
+    width: 45%;
+    padding-right: 40px;
+    position: relative; /* Přidáno */
+}
+
+.sticky-gallery {
+    position: sticky;
+    top: 80px; /* Adjust this value to set the distance from the top of the viewport */
+    max-height: calc(100vh - 40px); /* Adjust to leave some space at the bottom */
+    overflow-y: auto; /* Allow scrolling if the content is taller than the viewport */
+}
+
+.sticky-header {
+    display: block;
+    position: fixed;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 10px 0;
+    transition: top 0.3s ease-in-out;
+}
+
+.sticky-header.visible {
+    top: 0;
+}
+
+.sticky-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    
+}
+
+.sticky-left {
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+}
+
+.sticky-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.sticky-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.sticky-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.sticky-header .age-buttons {
+    display: flex;
+}
+
+.sticky-header .age-button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sticky-header .age-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.sticky-right {
+    display: flex;
+    align-items: center;
+}
+
+.sticky-header .sticky-price {
+    margin: 0 15px 0 0;
+    font-weight: bold;
+}
+
+.sticky-header .btn-insert {
+    --padding: 5px 15px;
+    font-size: 14px;
+    --height: 30px;
+    line-height: 20px;
+    white-space: nowrap;
+}
+
+.assistant-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.assistant-button:hover {
+    transform: scale(1.1);
+}
+
+.assistant-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+    </style>
+</head>
+<body>
+    <main class="main main-product">
+        <div class="container">
+            <ul class="breadcrumbs">
+                <li><a href="/" title="Zpět na úvod">Úvod</a></li>
+                <li class="active">{{ product.společné_části.základní_informace.název_produktu }}</li>
+            </ul>
+
+            <div class="left-column">
+                <div class="sticky-gallery">
+                    <div class="product-gallery">
+                        <div class="product-photo">
+                            <img src="{{ product.společné_části.galerie_obrázků[0].url }}" alt="{{ product.společné_části.galerie_obrázků[0].alt or 'Hlavní obrázek produktu' }}" id="main-image">
+                            <div class="badge-container">
+                                <span class="badge badge-sale">-20%</span>
+                                <span class="badge badge-discount" id="savings-badge">UŠETŘÍTE <span id="savings-amount"></span> Kč</span>
+                            </div>
+                            <span class="badge badge-points">8,23 věrnostních bodů</span>
+                        </div>
+                        <div class="product-thumbnails">
+                            {% for image in product.společné_části.galerie_obrázků %}
+                            <div class="product-thumbnail">
+                                <img src="{{ image.url }}" alt="{{ image.alt or product.společné_části.základní_informace.název_produktu }}" onclick="changeMainImage(this.src)">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
             </div>
-            <div class="faq">
-                <h3>Často kladené otázky</h3>
-                {% for qa in product.personalizované_části.personalizovaný_obsah[category].často_kladené_otázky %}
-                <div class="faq-item">
-                    <h4>{{ qa.otázka }}</h4>
-                    <p>{{ qa.odpověď }}</p>
+
+            <div class="main-column">
+                <div class="title-and-badge">
+                    <h1>{{ product.společné_části.základní_informace.název_produktu }}</h1>
+                    <span class="badge badge-stock">nízké zásoby</span>
                 </div>
-                {% endfor %}
-            </div>
-            <div class="recommended-products">
-                <h3>Doporučené produkty</h3>
-                <ul>
-                    {% for product in product.personalizované_části.personalizovaný_obsah[category].doporučené_produkty %}
-                    <li>{{ product }}</li>
+                
+               
+                <!-- Zde je změna: Přidáme element pro dynamický meta popisek -->
+                <p id="dynamic-meta-description"></p>
+               
+                <div class="review-stars-wrapper">
+                    <div >
+                        <span id="rating-stars"class="review-stars" ></span><span id="reviews-count"style="margin-left:10px"></span>
+                    </div>                                    
+                </div>
+                
+
+                <div class="currently-watching">
+                    <span class="currently-watching__icon"></span>
+                    <span class="currently-watching__text">
+                        <span id="viewers-count" class="currently-watching__number">
+                            <span class="currently-watching__number-inner"></span> lidí
+                        </span> 
+                        si zrovna prohlíží tento produkt
+                    </span>
+                </div>
+
+                <!-- Upravená struktura pro dynamickou cenu -->
+                <p class="price">
+                    <span id="price-with-vat"></span> Kč 
+                    <span class="price-without-vat">
+                        <span id="price-without-vat"></span> Kč bez DPH
+                    </span>
+                </p>
+                
+                
+                <div class="age-buttons">
+                    {% for age_group in product.personalizované_části %}
+                        <button class="age-button" data-age="{{ age_group.věková_kategorie }}">
+                            {{ age_group.věková_kategorie }}
+                        </button>
                     {% endfor %}
-                </ul>
+                </div>
+                <div id="variant-container"></div>
+
+                <div class="submit-block">
+                    <div class="product-buy-count-wrapper">
+                        <div class="buy_count">
+                            <button type="button" class="fc icons_minus minus_unit" title="Odebrat 1 ks"></button>
+                        </div>
+                        <input class="form-control" type="number" name="No" title="Počet kusů" value="1" step="1" data-filter="noreload">
+                        <div class="buy_count">
+                            <button type="button" class="fc icons_plus plus_unit" title="Přidat 1 ks"></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-insert" data-submit-btn="" data-tracking-clickaddtocart="{&quot;event&quot;:&quot;addToCart&quot;,&quot;add&quot;:{&quot;products&quot;:[{&quot;id&quot;:89,&quot;idProduct&quot;:89,&quot;EAN&quot;:4813409002096,&quot;code&quot;:&quot;44402-1&quot;,&quot;productCode&quot;:&quot;44402-1&quot;,&quot;variationCode&quot;:&quot;&quot;,&quot;hasVariations&quot;:false,&quot;variationsIds&quot;:[],&quot;idVariation&quot;:null,&quot;soldOut&quot;:null,&quot;categoryMain&quot;:[{&quot;id&quot;:460,&quot;name&quot;:&quot;T\u011blo&quot;},{&quot;id&quot;:463,&quot;name&quot;:&quot;N\u00e1plasti a gely&quot;},{&quot;id&quot;:604,&quot;name&quot;:&quot;Gely&quot;}],&quot;categoryCurrent&quot;:[{&quot;id&quot;:431,&quot;name&quot;:&quot;Mu\u017ei&quot;},{&quot;id&quot;:608,&quot;name&quot;:&quot;Pro sportovce&quot;},{&quot;id&quot;:&quot;&quot;,&quot;name&quot;:&quot;Fytogel na nohy Slaviton&quot;}],&quot;producer&quot;:null,&quot;campaigns&quot;:{&quot;MS&quot;:{&quot;id&quot;:&quot;WMS&quot;,&quot;name&quot;:&quot;WMS&quot;}},&quot;name&quot;:&quot;Fytogel na nohy Slaviton&quot;,&quot;vat&quot;:21,&quot;price&quot;:329.75,&quot;priceWithVat&quot;:399,&quot;priceWithoutVat&quot;:329.75,&quot;priceVat&quot;:69.25,&quot;priceWithoutDiscount&quot;:329.75,&quot;discount&quot;:0,&quot;hasDiscount&quot;:false,&quot;availability&quot;:&quot;skladem&quot;,&quot;url&quot;:&quot;https:\/\/www.kralovstvi-tiande.cz\/fytogel-na-nohy-slaviton_z89\/&quot;,&quot;imageUrl&quot;:&quot;https:\/\/data.kralovstvi-tiande.cz\/data\/tmp\/0\/3\/2403_0.jpg?1699515756_1&quot;,&quot;position&quot;:1}],&quot;listName&quot;:&quot;detail :&quot;,&quot;listId&quot;:null},&quot;_clear&quot;:true,&quot;once&quot;:false}">
+                        Vložit do košíku
+                    </button>
+                </div>
+
+               
+
+                <div class="product__info-qualities">
+                    <div class="eggo-product__info-qualities-quality">
+                        <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.5 17.5C18.366 17.5 21.5 14.366 21.5 10.5C21.5 6.63401 18.366 3.5 14.5 3.5C10.634 3.5 7.5 6.63401 7.5 10.5C7.5 14.366 10.634 17.5 14.5 17.5Z" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M14.502 17.5039L18.4686 24.3744L20.333 20.6036L24.5308 20.8744L20.5641 14.0039" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M8.43457 14.0039L4.4679 20.8744L8.66566 20.6036L10.5301 24.3744L14.4967 17.5039" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+
+                        Pověřená kvalita
+                    </div>
+                    <div class="eggo-product__info-qualities-delivery">
+                        <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.66634 22.1667C9.95501 22.1667 10.9997 21.122 10.9997 19.8333C10.9997 18.5447 9.95501 17.5 8.66634 17.5C7.37768 17.5 6.33301 18.5447 6.33301 19.8333C6.33301 21.122 7.37768 22.1667 8.66634 22.1667Z" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M20.3333 22.1667C21.622 22.1667 22.6667 21.122 22.6667 19.8333C22.6667 18.5447 21.622 17.5 20.3333 17.5C19.0447 17.5 18 18.5447 18 19.8333C18 21.122 19.0447 22.1667 20.3333 22.1667Z" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M6.33301 19.8334H3.99967V15.1667M2.83301 5.83337H15.6663V19.8334M10.9997 19.8334H17.9997M22.6663 19.8334H24.9997V12.8334H15.6663M15.6663 7.00004H21.4997L24.9997 12.8334" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M4 10.5H8.66667" stroke="#EC8074" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+
+                        Expresní doručení
+                    </div>
+                    <div class="eggo-product__info-qualities-cod">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.9803 11.0579L19.9802 17.0836C19.9802 18.2997 19.5782 19.9931 18.8762 21.4815L18.9892 21.5348L18.8762 21.4815C18.5184 22.2401 18.1068 22.8946 17.6693 23.3974C17.2308 23.9012 16.7721 24.2458 16.3214 24.3968L16.2028 24.4364L16.2425 24.555L16.6341 25.7244L16.6738 25.843L16.7923 25.8033C18.305 25.2967 19.4602 23.7204 20.2178 22.1143C20.9932 20.4703 21.4633 18.5607 21.4633 17.0837L21.4636 10.3005C21.4636 10.1038 21.3855 9.91533 21.2466 9.7762L21.2465 9.77611C21.1074 9.63696 20.9189 9.55884 20.7221 9.55884H20.1667C18.7354 9.55884 17.5751 10.7191 17.5751 12.1504V15.8691C17.3205 15.9692 17.0903 16.1137 16.8883 16.2786C16.8882 16.2786 16.8882 16.2787 16.8882 16.2787L19.9803 11.0579ZM19.9803 11.0579C19.457 11.1465 19.0582 11.6021 19.0582 12.1505V16.4668C19.0582 16.8764 18.7262 17.2085 18.3168 17.2085C18.1965 17.2085 18.0324 17.2595 17.8249 17.4285C17.6169 17.5979 17.4042 17.8569 17.211 18.1835L17.1034 18.1199L19.9803 11.0579ZM21.1582 9.8645C21.2736 9.98023 21.3386 10.137 21.3386 10.3005L21.3383 17.0837C21.3383 18.5387 20.874 20.4301 20.1047 22.061C19.3707 23.6171 18.2754 25.1122 16.8704 25.6428L21.1582 9.8645ZM11.1989 23.6163L11.1848 23.596C10.8872 23.1692 10.6076 22.6322 10.3569 22.0278L10.3569 22.0278C9.85507 20.8182 9.49905 19.4108 9.34242 18.2466L9.32574 18.1226L9.20183 18.1393L7.97939 18.3041L7.85553 18.3208L7.87221 18.4447C8.04466 19.725 8.43156 21.2584 8.98683 22.5966L8.98683 22.5966C9.26474 23.2661 9.59197 23.9048 9.96771 24.4441C10.3387 24.9768 10.7868 25.4554 11.3216 25.7495L11.4311 25.8097L11.4913 25.7002L12.0855 24.6196L12.1458 24.5101L12.0363 24.4499C11.7821 24.3101 11.4959 24.0383 11.1989 23.6163Z" fill="#EC8074" stroke="#EC8074" stroke-width="0.25"></path>
+<path d="M16.5923 17.7004V17.5754H16.4673H4.78856C4.49402 17.5754 4.25949 17.3408 4.25949 17.0466V7.25469C4.25949 6.96022 4.49428 6.72562 4.78856 6.72562H23.2136C23.5078 6.72562 23.7426 6.96023 23.7426 7.25469V17.0466C23.7426 17.3407 23.5079 17.5754 23.2136 17.5754H20.9814H20.8564V17.7004V18.9337V19.0587H20.9814H23.2136C24.327 19.0587 25.226 18.1601 25.226 17.0466V7.25469C25.226 6.14121 24.327 5.24225 23.2136 5.24225H4.78856C3.6748 5.24225 2.77637 6.14125 2.77637 7.25469V17.0466C2.77637 18.16 3.67508 19.0587 4.78856 19.0587H16.4673H16.5923V18.9337V17.7004Z" fill="#EC8074" stroke="#EC8074" stroke-width="0.25"></path>
+<path d="M13.0068 16.132C12.2075 16.132 11.5035 15.967 10.8948 15.637C10.2862 15.307 9.80949 14.834 9.46483 14.218C9.12016 13.5946 8.94783 12.854 8.94783 11.996C8.94783 11.1306 9.12016 10.3863 9.46483 9.76298C9.81683 9.13965 10.3082 8.65931 10.9388 8.32198C11.5695 7.98465 12.2992 7.81598 13.1278 7.81598C13.3332 7.81598 13.5422 7.83065 13.7548 7.85998C13.9675 7.88198 14.1655 7.92231 14.3488 7.98098V9.30098C14.1728 9.24965 13.9748 9.20931 13.7548 9.17998C13.5422 9.15065 13.3552 9.13598 13.1938 9.13598C12.5852 9.13598 12.0682 9.24231 11.6428 9.45498C11.2175 9.66031 10.8912 9.97565 10.6638 10.401C10.4438 10.819 10.3338 11.347 10.3338 11.985C10.3338 12.6083 10.4438 13.1326 10.6638 13.558C10.8838 13.976 11.1992 14.2913 11.6098 14.504C12.0205 14.7166 12.5118 14.823 13.0838 14.823C13.3038 14.823 13.5275 14.8046 13.7548 14.768C13.9822 14.7313 14.2058 14.68 14.4258 14.614V15.967C14.1692 16.0183 13.9272 16.0586 13.6998 16.088C13.4798 16.1173 13.2488 16.132 13.0068 16.132ZM13.3368 13.382H8.29883V12.381H13.3368V13.382ZM13.3368 11.611H8.29883V10.61H13.3368V11.611Z" fill="#EC8074"></path>
+<path d="M16.4675 5.49197H16.5925V5.36697C16.5925 5.09519 16.8127 4.87503 17.0844 4.87503H17.0846C17.3561 4.87503 17.5763 5.09515 17.5763 5.36697V5.49197H17.7013H18.9346H19.0596V5.36697C19.0596 4.27592 18.1753 3.39185 17.0845 3.39185C15.9937 3.39185 15.1094 4.27592 15.1094 5.36697V5.49197H15.2344H16.4675Z" fill="#EC8074" stroke="#EC8074" stroke-width="0.25"></path>
+<path d="M11.5339 5.49191H11.6589V5.36691C11.6589 5.09513 11.8791 4.87497 12.1509 4.87497H12.151C12.4225 4.87497 12.6427 5.09509 12.6427 5.36691V5.49191H12.7677H14.001H14.126V5.36691C14.126 4.27586 13.2417 3.39178 12.1509 3.39178C11.0601 3.39178 10.1758 4.27586 10.1758 5.36691V5.49191H10.3008H11.5339Z" fill="#EC8074" stroke="#EC8074" stroke-width="0.25"></path>
+<path d="M14.0007 5.49194H14.1257V5.36694V3.52419C14.1257 3.25268 14.3458 3.03249 14.6176 3.03249H14.6178C14.8893 3.03249 15.1095 3.25265 15.1095 3.52418C15.1095 3.52418 15.1095 3.52419 15.1095 3.52419L15.1092 6.03149L15.1092 6.1565H15.2342H16.4673H16.5923L16.5923 6.03153L16.5928 3.52447V3.52444C16.5928 2.4334 15.7085 1.54932 14.6177 1.54932C13.5269 1.54932 12.6426 2.4334 12.6426 3.52444V5.36694V5.49194H12.7676H14.0007Z" fill="#EC8074" stroke="#EC8074" stroke-width="0.25"></path>
+</svg>
+
+                        ECO friendly
+                    </div>
+                </div>
+
+                <p class="availability">
+                    
+                    Skladem > 5 ks
+                    
+                
+                  
+                    (při objednávce do 12:00 expedujeme tentýž den)
+                </p>
+                
+                <div id="personalized-content"></div>
+                
+                <div class="tiande-lifestyle">
+                    <img src="/static/images/kralovstvitiande.png" alt="Království TianDe" class="tiande-logo">
+                    <h3>TianDe Lifestyle</h3>
+                    <p id="tiande-lifestyle-text"></p>
+                </div>
+
+              
+
+                <div id="reviews" class="section">
+                    <h2>Recenze našich zákazníků</h2>
+                    <div id="reviews-list"></div>
+                </div>
+    
+                <div id="product-description" class="section">
+                    <h2>Popis produktu</h2>
+                    <p id="detailed-description"></p>
+                </div>
+
+                <div id="ingredients" class="section">
+                    <h2>Složení a účinky</h2>
+                    <ul id="ingredients-list">
+                        {% for item in product.společné_části.základní_informace.složení_a_účinky %}
+                        <li><strong>{{ item.složka }}:</strong> {{ item.účinek }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+                {% if product.společné_části.základní_informace.návod_k_použití %}
+                <div id="usage-instructions" class="section">
+                    <h2>Návod k použití</h2>
+                    <p>{{ product.společné_části.základní_informace.návod_k_použití }}</p>
+                </div>
+                {% endif %}
+                
+                <div id="expert-advice" class="section" style="display: none;">
+                    <h2>Rady expertů</h2>
+                    <p id="expert-advice-text"></p>
+                </div>
+
+            
+
+                <div id="faq" class="section">
+                    <h2>Často kladené otázky</h2>
+                    <ul id="faq-list"></ul>
+                </div>
+
+                <div id="bought-together" class="section">
+                    <h2>Nakupováno společně</h2>
+                    <ul id="bought-together-list"></ul>
+                </div>
+
+                <div id="recommended-products" class="section">
+                    <h2>Doporučené produkty</h2>
+                    <ul id="recommended-list"></ul>
+                </div>
+            </div>
+            <div id="additional-info" class="section">
+                <h2>Další informace</h2>
+                <div id="additional-info-content"></div>
+            </div>
+
+        </div>
+
+        <div id="sticky-header" class="sticky-header">
+            <div class="container">
+                <div class="sticky-left">
+                    <img id="sticky-image" src="" alt="Product image" class="sticky-image">
+                    <h2 id="sticky-title"></h2>
+                </div>
+                <div class="sticky-center">
+                    <div class="age-buttons">
+                        {% for age_group in product.personalizované_části %}
+                            <button class="age-button" data-age="{{ age_group.věková_kategorie }}">
+                                {{ age_group.věková_kategorie }}
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="sticky-right">
+                    <p class="sticky-price">
+                        <span id="sticky-price-with-vat"></span> Kč
+                    </p>
+                    <button class="btn btn-insert">Vložit do košíku</button>
+                </div>
             </div>
         </div>
-        {% endfor %}
+
+
+
+    </main>
+
+    <div id="assistant-button" class="assistant-button">
+        <img src="/static/images/asistent_tiande.png" alt="TianDe Asistent" class="assistant-icon">
     </div>
 
-    <nav class="sticky-nav">
-        <a href="#product-description">Popis</a>
-        <a href="#ingredients">Složení</a>
-        <a href="#usage-instructions">Použití</a>
-        <a href="#reviews">Recenze</a>
-        <a href="#faq">FAQ</a>
-    </nav>
-    
-    <section id="product-description">
-        <h2>Popis produktu</h2>
-        <p>{{ product.společné_části.detailní_popis }}</p>
-    </section>
-    
-    <section id="ingredients">
-        <h2>Složení a účinky</h2>
-        <ul>
-            {% for ingredient in product.společné_části.základní_informace.složení_a_účinky %}
-            <li><strong>{{ ingredient.složka }}:</strong> {{ ingredient.účinek }}</li>
-            {% endfor %}
-        </ul>
-    </section>
-    
-    <section id="usage-instructions">
-        <h2>Návod k použití</h2>
-        <p>{{ product.společné_části.základní_informace.návod_k_použití }}</p>
-    </section>
-    
-    <section id="frequently-bought-together">
-        <h2>Často kupováno společně</h2>
-        <!-- Implementace této sekce bude záviset na dostupnosti dat -->
-    </section>
-    
-    <section id="tiande-community">
-        <h2>Tiande komunita</h2>
-        <!-- Implementace této sekce bude záviset na dostupnosti dat -->
-    </section>
-    
-    <section id="educational-section">
-        <h2>Vzdělávací sekce</h2>
-        <a href="#">Navštivte náš kurz v Univerzitě Království Tiande</a>
-    </section>
-    
-    <section id="newsletter-signup">
-        <h2>Přihlaste se k odběru novinek</h2>
-        <form>
-            <input type="email" placeholder="Váš e-mail">
-            <button type="submit">Přihlásit</button>
-        </form>
-    </section>
-</div>
+    <script>
 
-<div class="chatbot-icon">
-    <img src="/static/images/chatbot-icon.png" alt="Chatbot">
-</div>
+window.productData = {{ product | tojson | safe }};
 
-<div class="quick-actions">
-    <button>Sdílet</button>
-    <button>Oblíbené</button>
-</div>
+function changeMainImage(src) {
+    document.getElementById('main-image').src = src;
+}
 
-<div class="eco-friendly-badge">
-    <img src="/static/images/eco-friendly.png" alt="Eco-friendly">
-</div>
+function createVariantOffer(productData) {
+    console.log("Vstupní data pro createVariantOffer:", productData);
+    
+    const varianty = productData.společné_části.základní_informace.varianty;
+    console.log("Nalezené varianty:", varianty);
 
-<script>
+    if (!varianty || varianty.length === 0) {
+        console.log("Varianty nejsou k dispozici nebo jsou prázdné");
+        return;
+    }
+
+    const container = document.getElementById('variant-container');
+    container.innerHTML = ''; // Vyčistíme kontejner před přidáním nových variant
+    const productName = productData.společné_části.základní_informace.název_produktu;
+
+    varianty.forEach((variant, index) => {
+        const počet = parseInt(variant.počet);
+        const cenaZaKus = parseFloat(variant.cena);
+        const celkovaCena = počet * cenaZaKus;
+        const původníCena = počet * parseFloat(varianty[0].cena);
+        const úspora = původníCena - celkovaCena;
+
+        const variantElement = document.createElement('div');
+        variantElement.className = 'variant-item';
+        if (index === 1) {
+            variantElement.classList.add('variant-best-value');
+            variantElement.classList.add('selected');
+        }
+
+        let html = `
+            <div class="variant-header">
+                <input type="radio" class="variant-radio" name="variant-choice" ${index === 1 ? 'checked' : ''} id="variant-${index}">
+                <label class="variant-radio-custom" for="variant-${index}"></label>
+                <span>${počet}x ${productName}</span>
+            </div>
+            <div class="variant-footer">
+                <div class="variant-tag-container">
+        `;
+
+        if (index > 0) {
+            html += `
+                    <span class="variant-tag variant-tag-save">UŠETŘÍ ${úspora.toFixed(0)} Kč</span>
+                    <span class="variant-tag variant-tag-price">${cenaZaKus.toFixed(0)} Kč /kus</span>
+            `;
+        }
+
+        html += `
+                </div>
+                <div class="variant-price-container">
+                    ${index > 0 ? `<span class="variant-price-original">${původníCena.toFixed(2)} Kč</span>` : ''}
+                    <span class="variant-price-final">${celkovaCena.toFixed(2)} Kč</span>
+                </div>
+            </div>
+        `;
+
+        if (index === 1) {
+            variantElement.innerHTML = `<div class="variant-best-value-label">NEJČASTĚJŠÍ VOLBA</div>` + html;
+        } else {
+            variantElement.innerHTML = html;
+        }
+
+        container.appendChild(variantElement);
+    });
+
+    // Přidáme event listener pro výběr varianty
+    container.addEventListener('change', handleVariantSelection);
+}
+
+function handleVariantSelection(event) {
+    if (event.target.classList.contains('variant-radio')) {
+        const variantItems = document.querySelectorAll('.variant-item');
+        variantItems.forEach(item => item.classList.remove('selected'));
+        event.target.closest('.variant-item').classList.add('selected');
+        updatePriceAndInfo();
+    }
+}
+
+function updatePriceAndInfo() {
+    const selectedVariant = document.querySelector('.variant-item.selected');
+    if (selectedVariant) {
+        const priceElement = selectedVariant.querySelector('.variant-price-final');
+        const price = priceElement.textContent.trim();
+        
+        document.getElementById('price-with-vat').textContent = price;
+        document.getElementById('sticky-price-with-vat').textContent = price;
+        
+        // Aktualizace ceny bez DPH (předpokládáme 21% DPH)
+        const priceWithoutVatValue = (parseFloat(price) / 1.21).toFixed(2);
+        document.getElementById('price-without-vat').textContent = `${priceWithoutVatValue} Kč bez DPH`;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    const ageCategoryButtons = document.querySelectorAll('.age-category-btn');
-    const ageCategoryContents = document.querySelectorAll('.age-category-content');
+    console.log("DOMContentLoaded event fired");
+    console.log("window.productData:", window.productData);
 
-    function showCategory(category) {
-        ageCategoryContents.forEach(content => {
-            if (content.dataset.category === category) {
-                content.style.display = 'block';
+    if (window.productData && window.productData.společné_části) {
+        createVariantOffer(window.productData);
+    } else {
+        console.error("Data produktu nejsou k dispozici nebo nemají očekávanou strukturu");
+    }
+
+    const ageButtons = document.querySelectorAll('.age-button');
+    const personalizedContent = document.getElementById('personalized-content');
+    const tiandeLifestyleText = document.getElementById('tiande-lifestyle-text');
+    const detailedDescription = document.getElementById('detailed-description');
+    const reviewsList = document.getElementById('reviews-list');
+    const faqList = document.getElementById('faq-list');
+    const boughtTogetherList = document.getElementById('bought-together-list');
+    const recommendedList = document.getElementById('recommended-list');
+    const dynamicMetaDescription = document.getElementById('dynamic-meta-description');
+    const priceWithVat = document.getElementById('price-with-vat');
+    const priceWithoutVat = document.getElementById('price-without-vat');
+
+    const stickyHeader = document.getElementById('sticky-header');
+    const originalCTA = document.querySelector('.submit-block');
+    const stickyImage = document.getElementById('sticky-image');
+    const stickyTitle = document.getElementById('sticky-title');
+    const stickyPrice = document.getElementById('sticky-price-with-vat');
+
+    const randomRating = (Math.random() * (5 - 4.9) + 4.9).toFixed(1);
+    const randomReviewCount = Math.floor(Math.random() * (300 - 50 + 1)) + 50;
+    document.getElementById('reviews-count').textContent = `${randomReviewCount} hodnocení`;
+    document.getElementById('rating-stars').innerHTML = '★'.repeat(5);
+    
+    const assistantButton = document.getElementById('assistant-button');
+    
+    assistantButton.addEventListener('click', function() {
+        alert('Otevírá se chatovací okno s asistentem TianDe');
+    });
+
+    function updatePrice() {
+        const price = window.productData.společné_části.základní_informace.cena;
+        priceWithVat.textContent = price.s_dph.toFixed(2).replace('.', ',') + ' Kč';
+        priceWithoutVat.textContent = price.bez_dph.toFixed(2).replace('.', ',') + ' Kč bez DPH';
+        
+        const discountPercentage = 0.20;
+        const savings = price.s_dph * discountPercentage;
+        document.getElementById('savings-amount').textContent = savings.toFixed(0);
+    }
+
+    function updatePersonalizedContent(ageCategory) {
+        const content = window.productData.personalizované_části.find(part => part.věková_kategorie === ageCategory);
+        if (content) {
+            personalizedContent.innerHTML = `
+                <h2>${content.krátký_popis}</h2>
+                <p>${content.marketingový_obsah.rychlý_přehled.join(', ')}</p>
+                <ul>
+                    ${content.marketingový_obsah.klíčové_benefity.map(benefit => `<li>${benefit}</li>`).join('')}
+                </ul>
+            `;
+
+            dynamicMetaDescription.textContent = content.meta_popisek;
+            tiandeLifestyleText.textContent = content.tiande_lifestyle_text;
+            detailedDescription.textContent = content.detailní_popis;
+
+            reviewsList.innerHTML = content.recenze_zákazníků.map(review => `
+                <div class="review">
+                    <p>
+                        <strong>${review.jméno} (${review.věk} let):</strong> 
+                        <span class="review-stars">${'★'.repeat(review.hodnocení)}</span><span class="review-stars-empty">${'★'.repeat(5-review.hodnocení)}</span>
+                    </p>
+                    <p>${review.text}</p>
+                </div>
+            `).join('');
+
+            faqList.innerHTML = content.často_kladené_otázky.map(faq => `
+                <li>
+                    <strong>Q: ${faq.otázka}</strong>
+                    <p>A: ${faq.odpověď}</p>
+                </li>
+            `).join('');
+
+            const expertAdviceSection = document.getElementById('expert-advice');
+            const expertAdviceText = document.getElementById('expert-advice-text');
+            if (content.rady_expertů) {
+                expertAdviceSection.style.display = 'block';
+                expertAdviceText.textContent = content.rady_expertů;
             } else {
-                content.style.display = 'none';
+                expertAdviceSection.style.display = 'none';
+            }
+
+            boughtTogetherList.innerHTML = content.často_kupováno_společně.map(item => `<li>${item}</li>`).join('');
+            recommendedList.innerHTML = content.doporučené_produkty.map(item => `<li>${item}</li>`).join('');
+        }
+    }
+
+    function updateActiveAgeButton(age) {
+        document.querySelectorAll('.age-button').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.age === age) {
+                btn.classList.add('active');
             }
         });
-
-        ageCategoryButtons.forEach(button => {
-            if (button.dataset.category === category) {
-                button.classList.add('active');
-            } else {
-                button.classList.remove('active');
+        
+        stickyHeader.querySelectorAll('.age-button').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.age === age) {
+                btn.classList.add('active');
             }
         });
     }
 
-    ageCategoryButtons.forEach(button => {
+    function updateAdditionalInfo() {
+        const additionalInfoContent = document.getElementById('additional-info-content');
+        if (window.productData.další_informace) {
+            additionalInfoContent.innerHTML = JSON.parse(window.productData.další_informace);
+        } else {
+            document.getElementById('additional-info').style.display = 'none';
+        }
+    }
+
+    function checkStickyHeader() {
+        const ctaRect = originalCTA.getBoundingClientRect();
+        if (ctaRect.top < 0) {
+            stickyHeader.classList.add('visible');
+        } else {
+            stickyHeader.classList.remove('visible');
+        }
+    }   
+
+    ageButtons.forEach(button => {
         button.addEventListener('click', function() {
-            showCategory(this.dataset.category);
+            const age = this.dataset.age;
+            updateActiveAgeButton(age);
+            updatePersonalizedContent(age);
         });
     });
 
-    // Zobrazit výchozí kategorii (první)
-    showCategory(ageCategoryButtons[0].dataset.category);
+    stickyHeader.querySelectorAll('.age-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const age = this.dataset.age;
+            updateActiveAgeButton(age);
+            updatePersonalizedContent(age);
+        });
+    });
+
+    if (ageButtons.length > 0) {
+        const firstAge = ageButtons[0].dataset.age;
+        updateActiveAgeButton(firstAge);
+        updatePersonalizedContent(firstAge);
+    }
+
+    const minusButton = document.querySelector('.minus_unit');
+    const plusButton = document.querySelector('.plus_unit');
+    const quantityInput = document.querySelector('input[name="No"]');
+
+    minusButton.addEventListener('click', function() {
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    });
+
+    plusButton.addEventListener('click', function() {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    });
+
+    const randomViewers = Math.floor(Math.random() * (80 - 20 + 1)) + 20;
+    document.getElementById('viewers-count').textContent = `${randomViewers} lidí`;
+
+    stickyImage.src = document.getElementById('main-image').src;
+    stickyTitle.textContent = window.productData.společné_části.základní_informace.název_produktu;
+    stickyPrice.textContent = window.productData.společné_části.základní_informace.cena.s_dph.toFixed(2).replace('.', ',') + ' Kč';
+
+    window.addEventListener('scroll', checkStickyHeader);
+
+    createVariantOffer(window.productData);
+    updatePrice();
+    updateAdditionalInfo();
+    checkStickyHeader();
+
+    document.querySelectorAll('.expert-advice').forEach(el => el.style.display = 'none');
 });
-</script>
-{% endblock %}
+    </script>
+</body>
+</html>

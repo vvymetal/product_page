@@ -4,9 +4,16 @@
 
 {% block content %}
 <h2>Produkty TianDe</h2>
-<ul>
+<ul style="list-style-type: none; padding: 0;">
     {% for product in products %}
-    <li><a href="{{ url_for('product', product_id=product.id) }}">{{ product.name }}</a></li>
+    <li style="margin-bottom: 20px; display: flex; align-items: center;">
+        {% if product.image_url %}
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+        {% else %}
+        <div style="width: 50px; height: 50px; background-color: #ccc; margin-right: 10px;"></div>
+        {% endif %}
+        <a href="{{ url_for('product', product_id=product.id) }}">{{ product.name }}</a>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
