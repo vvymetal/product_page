@@ -1,646 +1,233 @@
-<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="utf-8">
-    <title>{{ product.společné_části.základní_informace.název_produktu }} - Mobilní verze</title>
+    <title>Kosmetická fytonáplast Jian Kang - Mobilní verze</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-       /* Základní styly */
-body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
-    padding-top: 20px; /* Přizpůsobte podle výšky vaší sticky hlavičky */
-}
-
-.container {
-    max-width: 100%;
-    padding: 10px;
-}
-
-/* Horní část */
-.product-header {
-    position: relative;
-    padding: 15px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.back-button {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 24px;
-    color: #333;
-    text-decoration: none;
-}
-
-.title-and-badge {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 10px;
-}
-
-.product-title {
-    margin: 0;
-    font-size: 20px;
-    flex: 1;
-}
-
-.badge-stock {
-    background-color: #ffc107;
-    color: #000;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    white-space: nowrap;
-}
-
-#dynamic-meta-description {
-    font-size: 14px;
-    margin-bottom: 10px;
-    color: #666;
-}
-
-.product-rating {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.review-stars {
-    color: #ffc107;
-    margin-right: 5px;
-}
-
-.currently-watching {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    font-size: 14px;
- 
-    color: #666;
-}
-
-.currently-watching_number{
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    font-size: 14px;
-    font-weight:bold;
-    color: #EC8074;
-}
-
-.currently-watching__icon {
-    width: 10px;
-    height: 10px;
-    background-color: #EC8074;
-    border-radius: 50%;
-    margin-right: 10px;
-    position: relative;
-    display: inline-block;
-}
-
-.currently-watching__icon:before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    border: 2px solid #f8dad8;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.price {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.price-without-vat {
-    font-size: 14px;
-    color: #666;
-    display: block;
-}
-
-/* Galerie */
-.product-gallery {
-    position: relative;
-    overflow: hidden;
-    height: 300px;
-    margin-bottom: 20px;
-}
-
-.gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.gallery-nav {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-}
-
-.gallery-nav-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: rgba(255,255,255,0.5);
-    margin: 0 5px;
-}
-
-.gallery-nav-dot.active {
-    background-color: white;
-}
-
-/* Věkové kategorie */
-.age-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    overflow-x: auto;
-    padding-bottom: 10px;
-}
-
-.age-button {
-    padding: 8px 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-right: 10px;
-}
-
-.age-button:last-child {
-    margin-right: 0;
-}
-
-.age-button.active {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Hlavní obsah */
-.product-content {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.product-description {
-    margin-bottom: 20px;
-}
-
-.availability {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.availability-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #4CAF50;
-    margin-right: 5px;
-}
-
-.tiande-lifestyle {
-    background-color: #fdeae9;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.quick-overview, .key-benefits {
-    margin-bottom: 20px;
-}
-
-.quick-overview h3, .key-benefits h3 {
-    margin-bottom: 10px;
-}
-
-.quick-overview ul, .key-benefits ul {
-    padding-left: 20px;
-    margin: 0;
-}
-
-/* Rozbalovací sekce */
-.accordion {
-    margin-bottom: 20px;
-}
-
-.accordion-item {
-    background-color: white;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.accordion-header {
-    padding: 15px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.accordion-content {
-    padding: 15px;
-    display: none;
-}
-
-/* Spodní část */
-.related-products, .recommended-products {
-    margin-bottom: 20px;
-}
-
-.product-card {
-    background-color: white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Sticky prvky */
-.sticky-top, .sticky-bottom {
-    position: fixed;
-    left: 0;
-    right: 0;
-    background-color: white;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 1000;
-}
-
-.sticky-top {
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.sticky-bottom {
-    bottom: 0;
-    display: flex;
-    justify-content: space-between;
-}
-
-.sticky-bottom button {
-    flex: 1;
-    margin: 0 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.add-to-cart {
-    background-color: #4CAF50;
-}
-
-.buy-now {
-    background-color: #2196F3;
-}
-
-/* Další prvky */
-.scroll-to-top {
-    position: fixed;
-    bottom: 70px;
-    right: 20px;
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    text-decoration: none;
-    z-index: 1000;
-}
-
-.chat-button {
-    position: fixed;
-    bottom: 70px;
-    left: 20px;
-    background-color: #4CAF50;
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    text-decoration: none;
-    z-index: 1000;
-}
-
-/* Responzivní úpravy */
-@media (max-width: 480px) {
-    .product-title {
-        font-size: 18px;
-    }
-
-    .price {
-        font-size: 20px;
-    }
-
-    .age-buttons {
-        flex-wrap: wrap;
-    }
-
-    .age-button {
-        margin-bottom: 10px;
-    }
-
-    .product-header {
-  padding: 15px;
-}
-
-.product-title {
-  font-size: 1.5rem;
-  margin-bottom: 5px;
-}
-
-.meta-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.rating-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.stars {
-  color: #ffc107;
-  margin-right: 5px;
-}
-
-.rating-count {
-  font-size: 0.9rem;
-}
-
-.viewers-count {
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-.viewers-count .number {
-  font-weight: bold;
-  color: #EC8074;
-}
-
-.price-container {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 15px;
-}
-
-.price-with-vat {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.price-without-vat {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.product-gallery {
-  margin-bottom: 20px;
-}
-
-.main-image-container {
-  width: 100%;
-  padding-bottom: 100%; /* Vytvoří čtvercový kontejner */
-  position: relative;
-  overflow: hidden;
-}
-
-.main-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.thumbnails {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.thumbnail {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  margin: 0 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.sticky-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  z-index: 1000;
-}
-
-.product-info {
-  display: flex;
-  align-items: center;
-}
-
-.product-thumbnail {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
-.product-name {
-  font-size: 1rem;
-  margin: 0;
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.price-and-cart {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.price {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.add-to-cart-button {
-  background-color: #69004d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.9rem;
-}
-.sticky-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 10px;
-    z-index: 1000;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-in-out;
-}
-
-.sticky-header.visible {
-    transform: translateY(0);
-}
-
-.sticky-left {
-    display: flex;
-    align-items: center;
-}
-
-.sticky-image {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-#sticky-product-name {
-    font-size: 15px;
-    margin: 0;
-    max-width: 180px;
-    --white-space: nowrap;
-    --overflow: hidden;
-    --text-overflow: ellipsis;
-}
-
-.sticky-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-#sticky-product-price {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.btn-insert {
-    background-color: #69004d;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-}
-.sticky-header {
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-in-out;
-}
-
-.sticky-header.visible {
-    transform: translateY(0);
-}
-
-}
-
+        /* Základní styly */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        
+        /* Styly pro hodnocení */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .stars {
+            color: #EC8074;
+            margin-right: 5px;
+        }
+        .rating-count {
+            font-size: 0.9rem;
+        }
+        
+        /* Styly pro počet prohlížejících */
+        .currently-watching {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .currently-watching__icon {
+            width: 10px;
+            height: 10px;
+            background-color: #EC8074;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .currently-watching__number {
+            font-weight: bold;
+            color: #EC8074;
+        }
+        
+        /* Styly pro galerii */
+        .product-gallery {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* Vytvoří čtvercový kontejner */
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .badge-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .badge-sale {
+            background-color: #dc3545;
+            color: white;
+        }
+        .badge-discount {
+            background-color: white;
+            color: black;
+            border: 1px solid #dc3545;
+        }
+        .badge-points {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #69004d;
+            color: white;
+        }
+        .product-thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .product-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        /* Styly pro věkové kategorie */
+        .age-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .age-button {
+            padding: 8px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .age-button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        /* Styly pro dostupnost */
+        .availability {
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* Styly pro sekce s obsahem */
+        .section {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        /* Styly pro TianDe Lifestyle */
+        .tiande-lifestyle {
+            background-color: #fdeae9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        /* Styly pro recenze */
+        .review {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .review:last-child {
+            border-bottom: none;
+        }
+        
+        /* Styly pro FAQ */
+        .faq-item {
+            margin-bottom: 15px;
+        }
+        .faq-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        /* Styly pro související produkty */
+        .product-card {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
-    <div id="sticky-header" class="sticky-header">
-        <div class="sticky-left">
-            <img id="sticky-image" src="" alt="Miniatura produktu" class="sticky-image">
-            <h2 id="sticky-product-name"></h2>
-        </div>
-        <div class="sticky-right">
-            <span class="product-price" id="sticky-product-price"></span>
-            <button class="btn-insert">Do košíku</button>
-        </div>
-    </div>
-    
     <div class="container">
-        <div class="product-header">
-            <h1 class="product-title">Kosmetická fytonáplast Jian Kang</h1>
-            <p class="meta-description">Fytonáplast Jian Kang - tradiční čínská medicína pro pohybový aparát. Preventivní péče o klouby a pohyb.</p>
-            
-            <div class="rating-container">
-              <div class="stars">★★★★★</div>
-              <span class="rating-count">62 hodnocení</span>
-            </div>
-            
-            <div class="currently-watching">
-                <span class="currently-watching__icon"></span>
-                <span class="currently-watching__text">
-                    <span id="viewers-count" class="currently-watching__number">
-                        <span class="currently-watching__number-inner"></span> lidí
-                    </span> 
-                    si zrovna prohlíží tento produkt
-                </span>
-            </div>
-            
-            <div class="price-container">
-              <span class="price-with-vat">169,00 Kč</span>
-              <span class="price-without-vat">139,67 Kč bez DPH</span>
-            </div>
-          </div>
-          
-          
-          
+        <h1>Kosmetická fytonáplast Jian Kang</h1>
         
-        <div class="product-gallery">
-            <img src="{{ product.společné_části.galerie_obrázků[0].url }}" alt="{{ product.společné_části.galerie_obrázků[0].alt }}" class="gallery-image">
-            <div class="gallery-nav">
-                {% for image in product.společné_části.galerie_obrázků %}
-                    <div class="gallery-nav-dot {% if loop.first %}active{% endif %}"></div>
-                {% endfor %}
-            </div>
+        <div class="rating-container">
+            <div class="stars">★★★★★</div>
+            <span class="rating-count">62 hodnocení</span>
         </div>
         
+        <div class="currently-watching">
+            <span class="currently-watching__icon"></span>
+            <span class="currently-watching__text">
+                <span class="currently-watching__number">73 lidí</span> 
+                si zrovna prohlíží tento produkt
+            </span>
+        </div>
+        
+        <!-- Cena -->
+        <div class="price-container">
+            <span class="price-with-vat">169,00 Kč</span>
+            <span class="price-without-vat">139,67 Kč bez DPH</span>
+        </div>
+        
+        <!-- Galerie -->
+        <div class="product-gallery">
+            <img src="{{ product.společné_části.galerie_obrázků[0].url }}" alt="{{ product.společné_části.galerie_obrázků[0].alt }}" class="gallery-image" id="main-image">
+            <div class="badge-container">
+                <span class="badge badge-sale">-20%</span>
+                <span class="badge badge-discount">UŠETŘÍTE <span id="savings-amount">0</span> Kč</span>
+            </div>
+            <span class="badge badge-points">8,23 věrnostních bodů</span>
+        </div>
+        <div class="product-thumbnails">
+            {% for image in product.společné_části.galerie_obrázků %}
+                <img src="{{ image.url }}" alt="{{ image.alt }}" class="product-thumbnail" onclick="changeMainImage(this.src)">
+            {% endfor %}
+        </div>
+        
+        <!-- Věkové kategorie -->
         <div class="age-buttons">
             {% for age_group in product.personalizované_části %}
                 <button class="age-button" data-age="{{ age_group.věková_kategorie }}">
@@ -648,82 +235,126 @@ body {
                 </button>
             {% endfor %}
         </div>
-    
-        <div class="product-content">
-            <div class="product-description">
-                <p id="personalized-description"></p>
-            </div>
-    
-            <div class="availability">
-                <span class="availability-dot"></span>
-                <span>Skladem</span>
-            </div>
-    
-            <div class="tiande-lifestyle">
-                <h3>TianDe Lifestyle</h3>
-                <p id="tiande-lifestyle-text"></p>
-            </div>
-    
-            <div class="quick-overview">
-                <h3>Rychlý přehled</h3>
-                <ul id="quick-overview-list"></ul>
-            </div>
-    
-            <div class="key-benefits">
-                <h3>Klíčové benefity</h3>
-                <ul id="key-benefits-list"></ul>
-            </div>
+        
+        <p class="availability">Skladem > 5 ks (při objednávce do 12:00 expedujeme tentýž den)</p>
+        
+        <div id="personalized-content" class="section">
+            <h2>Popis produktu</h2>
+            <p>Fytonáplast Jian Kang - tradiční čínská medicína pro pohybový aparát. Preventivní péče o klouby a pohyb.</p>
         </div>
-    
-        <!-- Zbytek kódu zůstává stejný -->
-    </div>
-
-        <div class="accordion">
-            <div class="accordion-item">
-                <div class="accordion-header">Popis produktu</div>
-                <div class="accordion-content" id="product-description"></div>
-            </div>
-            <div class="accordion-item">
-                <div class="accordion-header">Složení a účinky</div>
-                <div class="accordion-content" id="ingredients-effects"></div>
-            </div>
-            <div class="accordion-item">
-                <div class="accordion-header">Návod k použití</div>
-                <div class="accordion-content" id="usage-instructions"></div>
-            </div>
-            <div class="accordion-item">
-                <div class="accordion-header">Recenze</div>
-                <div class="accordion-content" id="reviews"></div>
-            </div>
-            <div class="accordion-item">
-                <div class="accordion-header">Často kladené otázky</div>
-                <div class="accordion-content" id="faq"></div>
-            </div>
+        
+        <div class="tiande-lifestyle">
+            <h3>TianDe Lifestyle</h3>
+            <p id="tiande-lifestyle-text">Zde bude personalizovaný text o TianDe Lifestyle.</p>
         </div>
-
-        <div class="related-products">
-            <h3>Často kupováno společně</h3>
-            <div id="related-products-list"></div>
+        
+        <div class="section">
+            <h2>Rychlý přehled</h2>
+            <ul id="quick-overview-list"></ul>
         </div>
-
-        <div class="recommended-products">
-            <h3>Doporučené produkty</h3>
-            <div id="recommended-products-list"></div>
+        
+        <div class="section">
+            <h2>Klíčové benefity</h2>
+            <ul id="key-benefits-list"></ul>
+        </div>
+        
+        <div id="product-description" class="section">
+            <h2>Detailní popis</h2>
+            <p id="detailed-description"></p>
+        </div>
+        
+        <div id="ingredients" class="section">
+            <h2>Složení a účinky</h2>
+            <ul id="ingredients-list"></ul>
+        </div>
+        
+        <div id="usage-instructions" class="section">
+            <h2>Návod k použití</h2>
+            <p></p>
+        </div>
+        
+        <div id="reviews" class="section">
+            <h2>Recenze našich zákazníků</h2>
+            <div id="reviews-list"></div>
+        </div>
+        
+        <div id="faq" class="section">
+            <h2>Často kladené otázky</h2>
+            <div id="faq-list"></div>
+        </div>
+        
+        <div id="bought-together" class="section">
+            <h2>Nakupováno společně</h2>
+            <div id="bought-together-list"></div>
+        </div>
+        
+        <div id="recommended-products" class="section">
+            <h2>Doporučené produkty</h2>
+            <div id="recommended-list"></div>
         </div>
     </div>
-
-    <div class="sticky-bottom">
-        <button class="add-to-cart">Přidat do košíku</button>
-        <button class="buy-now">Koupit nyní</button>
-    </div>
-
-    <a href="#" class="scroll-to-top">↑</a>
-    <a href="#" class="chat-button">💬</a>
 
     <script>
-// Globální proměnné
+        // Globální proměnné
 let currentImageIndex = 0;
-window.productData = {{ product | tojson | safe }}; // Toto by mělo být již na stránce
+window.productData = {{ product | tojson | safe }};
+
+// Funkce pro změnu hlavního obrázku
+function changeMainImage(src) {
+    document.getElementById('main-image').src = src;
+}
+
+// Funkce pro aktualizaci počtu kusů
+function updateQuantity(change) {
+    const quantityInput = document.querySelector('input[name="No"]');
+    let currentQuantity = parseInt(quantityInput.value);
+    currentQuantity += change;
+    if (currentQuantity < 1) currentQuantity = 1;
+    quantityInput.value = currentQuantity;
+}
+
+// Funkce pro přidání do košíku
+function addToCart() {
+    const selectedVariant = document.querySelector('.variant-item.selected');
+    const quantity = document.querySelector('input[name="No"]').value;
+    if (selectedVariant) {
+        const variantName = selectedVariant.querySelector('.variant-header span').textContent;
+        const price = selectedVariant.querySelector('.variant-price-final').textContent;
+        alert(`Přidáno do košíku: ${variantName}, Množství: ${quantity}, Cena: ${price}`);
+    } else {
+        alert('Prosím vyberte variantu produktu.');
+    }
+}
+
+// Funkce pro otevření/zavření accordion sekcí
+function toggleAccordion(header) {
+    header.classList.toggle('active');
+    const content = header.nextElementSibling;
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+}
+
+// Funkce pro aktualizaci zobrazení úspory
+function updateSavings() {
+    const selectedVariant = document.querySelector('.variant-item.selected');
+    if (selectedVariant) {
+        const originalPrice = selectedVariant.querySelector('.variant-price-original');
+        const finalPrice = selectedVariant.querySelector('.variant-price-final');
+        if (originalPrice && finalPrice) {
+            const saving = parseFloat(originalPrice.textContent) - parseFloat(finalPrice.textContent);
+            document.getElementById('savings-amount').textContent = saving.toFixed(0);
+        }
+    }
+}
+
+// Funkce pro zobrazení chatovacího okna s asistentem
+function showAssistantChat() {
+    alert('Otevírá se chatovací okno s asistentem TianDe');
+    // Zde by byla implementace otevření chatovacího okna
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOMContentLoaded event fired");
@@ -737,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializePage() {
-    console.log("Initializing page with data:", JSON.stringify(window.productData, null, 2));
+    console.log("Initializing page");
     
     updateProductInfo();
     setupAgeButtons();
@@ -1007,6 +638,7 @@ function handleVariantSelection(event) {
     }
 }
 
+
 function updatePriceAndInfo() {
     const selectedVariant = document.querySelector('.variant-item.selected');
     if (selectedVariant) {
@@ -1063,17 +695,23 @@ function setupStickyHeader() {
     checkStickyHeader();
 }
 
-// Přidejte následující CSS do vašeho stylového souboru nebo do <style> tagu v HTML
-/*
-.sticky-header {
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-in-out;
-}
+// Event listenery pro tlačítka množství
+document.querySelector('.minus_unit').addEventListener('click', () => updateQuantity(-1));
+document.querySelector('.plus_unit').addEventListener('click', () => updateQuantity(1));
 
-.sticky-header.visible {
-    transform: translateY(0);
-}
-*/
+// Event listener pro tlačítko "Přidat do košíku"
+document.querySelector('.btn-insert').addEventListener('click', addToCart);
+
+// Event listener pro změnu varianty
+document.getElementById('variant-container').addEventListener('change', function(event) {
+    if (event.target.classList.contains('variant-radio')) {
+        handleVariantSelection(event);
+        updateSavings();
+    }
+});
+
+// Event listener pro tlačítko asistenta
+document.getElementById('assistant-button').addEventListener('click', showAssistantChat);
 
 // Kontrola, zda se sticky header zobrazuje správně
 window.addEventListener('load', function() {
@@ -1085,15 +723,9 @@ window.addEventListener('load', function() {
     }, 500);
 });
 
-// Kontrola, zda se sticky header zobrazuje správně
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        window.scrollTo(0, 500);
-        setTimeout(function() {
-            window.scrollTo(0, 0);
-        }, 100);
-    }, 500);
-});
-    </script>
+// Inicializace stránky při načtení DOM
+document.addEventListener('DOMContentLoaded', initializePage);
+
+</script>
 </body>
 </html>
