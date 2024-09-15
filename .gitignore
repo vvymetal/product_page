@@ -13,7 +13,7 @@ __pycache__/
 .env
 Worksheet.html
 products.csv
-*.json
+
 
 
 # Ignorovat logy
@@ -21,4 +21,4 @@ products.csv
 
 # Ignorovat soubory IDE (pro případ, že používáte PyCharm nebo VS Code)
 .idea/
-.vscode/
+.vscode/.env
