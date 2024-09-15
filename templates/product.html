@@ -556,6 +556,118 @@
     border-radius: 50%;
 }
 
+.variant-container {
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+
+.variant-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.variant-best-value {
+    border: 2px solid #ff6b6b;
+    background-color: #fff0f0;
+}
+
+.variant-best-value-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff6b6b;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.variant-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.variant-radio-custom {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.variant-radio:checked + .variant-radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+}
+
+.variant-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.variant-tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.variant-tag {
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.variant-tag-save {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.variant-tag-price {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.variant-price-container {
+    text-align: right;
+}
+
+.variant-price-original {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 12px;
+}
+
+.variant-price-final {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.variant-item.selected {
+    box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+.variant-radio {
+    display: none;
+}
+
     </style>
 </head>
 <body>
